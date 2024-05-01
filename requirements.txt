@@ -1,0 +1,8 @@
+django
+sqllite
+matplotlib
+pathlib
+PIL
+json
+io
+requests
