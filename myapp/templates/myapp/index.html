@@ -1,0 +1,1423 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, viewport-fit=cover" />
+    <meta name="theme-color" content="#121217" />
+    <style>
+        @font-face {
+            font-family: 'avenir-next';
+            font-weight: 250 900;
+            src: url({%static 'fonts/avenir-next/avenir-next-v4.woff2'%}) format('woff2');
+            font-display: block;
+            font-style: normal;
+        }
+    </style>
+    <style>
+        .blog,
+        .toc,
+        .blog-link {
+            --e-default: cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .blog>h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: .5rem;
+            line-height: 1.35;
+            width: 100%
+        }
+
+        .blog>blockquote {
+            background: rgba(var(--c-bg-secondary) / 1);
+            color: rgba(var(--c-on-bg) / .75);
+            padding: .6rem .75rem;
+            border-left: 4px solid rgba(var(--c-bg-tertiary) / 1);
+            margin-left: -4px;
+            width: calc(100% + 8px);
+            border-radius: .4rem;
+            font-size: .875rem;
+            line-height: 1.6
+        }
+
+        .blog>h2 {
+            font-weight: 700;
+            font-size: 1.6rem;
+            margin-top: 3rem;
+            margin-bottom: .25rem;
+            line-height: 1.35;
+            width: 100%
+        }
+
+        .blog>h3 {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-top: 2.5rem;
+            line-height: 1.5;
+            width: 100%
+        }
+
+        .blog>p+h3 {
+            margin-top: 1.5rem
+        }
+
+        .blog>h1+p {
+            margin-top: .25rem
+        }
+
+        .blog>h2+p {
+            margin-top: .35rem
+        }
+
+        .blog>h3+p {
+            margin-top: .5rem
+        }
+
+        .blog>h2+h3 {
+            margin-top: 1rem
+        }
+
+        .blog>p,
+        .blog li {
+            width: 100%;
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-top: 1rem;
+            color: rgba(var(--c-on-bg) / .75);
+            font-weight: 400
+        }
+
+        .blog table {
+            text-align: left;
+            width: 100%;
+            font-weight: 400;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            font-size: 1rem
+        }
+
+        .toc-item-h2 {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: rgba(var(--c-on-bg));
+            font-weight: 500
+        }
+
+        @media (min-width: 768px) {
+
+            .blog>p,
+            .blog>li,
+            .blog>table,
+            .toc-item-h2 {
+                font-size: 1.125rem
+            }
+
+            .blog>blockquote {
+                font-size: 1rem;
+                line-height: 1.7;
+                padding: .8rem 1rem
+            }
+        }
+
+        .blog ol {
+            margin-top: 1rem;
+            list-style: decimal;
+            margin-left: 2.5rem
+        }
+
+        .blog ul {
+            margin-top: 1rem;
+            list-style: disc;
+            margin-left: 2.5rem
+        }
+
+        .blog h2+ul,
+        .blog h3+ul {
+            margin-top: 0rem
+        }
+
+        .blog ol li,
+        .blog ul li {
+            margin-top: .5rem
+        }
+
+        .blog li ol,
+        .blog li ul {
+            margin-top: 0rem
+        }
+
+        .blog p+ol,
+        .blog p+ul {
+            margin-top: 0rem
+        }
+
+        .blog p:first-child {
+            margin-top: 0rem
+        }
+
+        .blog p a,
+        .blog h1 a,
+        .blog h2 a,
+        .blog h3 a,
+        .blog h4 a,
+        .blog h5 a,
+        .blog h6 a,
+        .blog li a {
+            transition: all .2s var(--e-default);
+            position: relative;
+            padding: 0 2px;
+            margin: 0 -2px;
+            border-radius: 0;
+            box-shadow: 0 -2px rgba(var(--c-primary) / .5) inset;
+            z-index: 0
+        }
+
+        .blog h1 .heading-anchor,
+        .blog h2 .heading-anchor,
+        .blog h3 .heading-anchor,
+        .blog h4 .heading-anchor,
+        .blog h5 .heading-anchor,
+        .blog h6 .heading-anchor {
+            box-shadow: 0 0 rgba(var(--c-primary) / .5) inset;
+            transition: all .2s var(--e-default);
+            padding: 0rem .25ch;
+            margin-left: .5ch;
+            opacity: 0
+        }
+
+        .blog h1:hover .heading-anchor,
+        .blog h2:hover .heading-anchor,
+        .blog h3:hover .heading-anchor,
+        .blog h4:hover .heading-anchor,
+        .blog h5:hover .heading-anchor,
+        .blog h6:hover .heading-anchor {
+            opacity: .5
+        }
+
+        .blog h1:hover .heading-anchor:hover,
+        .blog h2:hover .heading-anchor:hover,
+        .blog h3:hover .heading-anchor:hover,
+        .blog h4:hover .heading-anchor:hover,
+        .blog h5:hover .heading-anchor:hover,
+        .blog h6:hover .heading-anchor {
+            opacity: 1
+        }
+
+        .blog p a:hover,
+        .blog p a:focus-visible,
+        .blog li a:hover,
+        .blog li a:focus-visible {
+            color: rgba(var(--c-on-primary));
+            border-radius: 4px;
+            box-shadow: 0 -1.5rem rgba(var(--c-primary)) inset
+        }
+
+        .blog h1 a:hover,
+        .blog h1 a:focus-visible {
+            color: rgba(var(--c-on-primary));
+            border-radius: 5px;
+            box-shadow: 0 -2.5rem rgba(var(--c-primary)) inset
+        }
+
+        .blog h2 a:hover,
+        .blog h2 a:focus-visible {
+            color: rgba(var(--c-on-primary));
+            border-radius: 5px;
+            box-shadow: 0 -1.9rem rgba(var(--c-primary)) inset
+        }
+
+        .blog h3 a:hover,
+        .blog h3 a:focus-visible {
+            color: rgba(var(--c-on-primary));
+            border-radius: 5px;
+            box-shadow: 0 -1.6rem rgba(var(--c-primary)) inset
+        }
+
+        .blog .inline {
+            display: inline-block
+        }
+
+        .blog .w-full {
+            width: 100%
+        }
+
+        .blog .w-1\/2 {
+            width: 50%
+        }
+
+        .blog .w-1\/3 {
+            width: 33.3333%
+        }
+
+        .blog table+p {
+            margin-top: 1.5rem
+        }
+
+        .blog table img {
+            margin: 0
+        }
+
+        .blog th {
+            font-weight: 600;
+            padding: .4rem .6rem;
+            max-width: 100%
+        }
+
+        .blog tr {
+            max-width: 100%;
+            display: flex
+        }
+
+        .blog td {
+            padding: .3rem;
+            max-width: 100%
+        }
+
+        @media (min-width: 768px) {
+            .blog .md\:w-1\/2 {
+                width: 50%
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .blog .lg\:w-1\/3 {
+                width: 33.3333%
+            }
+        }
+
+        .blog-link {
+            transition: all .2s var(--e-default);
+            position: relative;
+            padding: 2px 4px;
+            margin: -2px -4px;
+            border-radius: 0;
+            box-shadow: 0 0 rgba(var(--c-primary) / .5) inset;
+            z-index: 0
+        }
+
+        .blog-link:hover,
+        .blog-link:focus-visible {
+            color: rgba(var(--c-on-primary));
+            border-radius: 4px;
+            box-shadow: 0 -1.5rem rgba(var(--c-primary)) inset
+        }
+
+        .toc li {
+            margin-left: 0;
+            list-style: none;
+            display: flex;
+            flex-direction: column
+        }
+
+        .toc a {
+            padding: .5rem .75rem;
+            background-color: rgba(var(--c-primary) / 0);
+            transition: all .2s var(--e-default);
+            border-radius: .5rem;
+            font-size: 1rem
+        }
+
+        .toc a:hover,
+        .toc a:focus-visible {
+            background-color: rgba(var(--c-primary) / .15);
+            color: rgba(var(--c-primary))
+        }
+
+        .toc-item-h2:first-child {
+            margin-top: 0
+        }
+
+        .toc-item-h3 {
+            line-height: 1.5;
+            padding-left: .5rem;
+            color: rgba(var(--c-on-bg) / .75);
+            font-weight: 400
+        }
+
+        .blog pre {
+            width: 100%
+        }
+
+        .numerator-fade.svelte-1kld1uf {
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0rem, black .3rem, black 1.2rem, transparent 1.5rem);
+            mask-image: linear-gradient(to bottom, transparent 0rem, black .3rem, black 1.2rem, transparent 1.5rem)
+        }
+
+        .delay-1.svelte-1goev0v {
+            animation-delay: .25s
+        }
+
+        .path-animation.svelte-1goev0v {
+            stroke-dasharray: 16 16;
+            stroke-dashoffset: 0;
+            animation-name: svelte-1goev0v-path-animation-1;
+            animation-duration: .5s;
+            animation-iteration-count: infinite;
+            animation-timing-function: cubic-bezier(.3, 0, .7, 1)
+        }
+
+        @keyframes svelte-1goev0v-path-animation-1 {
+            0% {
+                stroke-dasharray: 4 4;
+                stroke-dashoffset: 0
+            }
+
+            to {
+                stroke-dasharray: 4 4;
+                stroke-dashoffset: 16
+            }
+        }
+
+        .is-loading.svelte-1eyjon4 #end69mBNOzR2_tr.svelte-1eyjon4 {
+            animation: svelte-1eyjon4-end69mBNOzR2_tr__tr 2.1s linear infinite normal forwards
+        }
+
+        @keyframes svelte-1eyjon4-end69mBNOzR2_tr__tr {
+            0% {
+                transform: translate(12px, 12px) rotate(0)
+            }
+
+            66.666667% {
+                transform: translate(12px, 12px) rotate(0);
+                animation-timing-function: cubic-bezier(.6, 0, .395, 1)
+            }
+
+            to {
+                transform: translate(12px, 12px) rotate(180deg)
+            }
+        }
+
+        .is-loading.svelte-1eyjon4 #end69mBNOzR6_ts.svelte-1eyjon4 {
+            animation: svelte-1eyjon4-end69mBNOzR6_ts__ts 2.1s linear infinite normal forwards
+        }
+
+        @keyframes svelte-1eyjon4-end69mBNOzR6_ts__ts {
+            0% {
+                transform: translate(11.605393px, 12px) scale(1)
+            }
+
+            23.809524% {
+                transform: translate(11.605393px, 12px) scaleY(.5)
+            }
+
+            42.857143% {
+                transform: translate(11.605393px, 12px) scale(0)
+            }
+
+            to {
+                transform: translate(11.605393px, 12px) scale(0)
+            }
+        }
+
+        .is-loading.svelte-1eyjon4 #end69mBNOzR8_ts.svelte-1eyjon4 {
+            animation: svelte-1eyjon4-end69mBNOzR8_ts__ts 2.1s linear infinite normal forwards
+        }
+
+        @keyframes svelte-1eyjon4-end69mBNOzR8_ts__ts {
+            0% {
+                transform: translate(12px, 21px) scaleY(0)
+            }
+
+            9.52381% {
+                transform: translate(12px, 21px) scaleY(0)
+            }
+
+            47.619048% {
+                transform: translate(12px, 21px) scale(1)
+            }
+
+            to {
+                transform: translate(12px, 21px) scale(1)
+            }
+        }
+
+        .is-loading.svelte-1eyjon4 #end69mBNOzR9_to.svelte-1eyjon4 {
+            animation: svelte-1eyjon4-end69mBNOzR9_to__to 2.1s linear infinite normal forwards
+        }
+
+        @keyframes svelte-1eyjon4-end69mBNOzR9_to__to {
+            0% {
+                transform: translate(12px, 10px)
+            }
+
+            14.285714% {
+                transform: translate(12px, 16.5px)
+            }
+
+            90.47619% {
+                transform: translate(12px, 16.5px)
+            }
+
+            to {
+                transform: translate(12px, 14px)
+            }
+        }
+
+        .scale-animation.svelte-1acvjgn {
+            animation: svelte-1acvjgn-scale .175s
+        }
+
+        @keyframes svelte-1acvjgn-scale {
+            0% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(.95);
+                animation-timing-function: ease-in-out
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        .is-loading.svelte-1txcrnd #etzDo5sCAIn2_tr.svelte-1txcrnd {
+            animation: svelte-1txcrnd-etzDo5sCAIn2_tr__tr 3s linear infinite
+        }
+
+        @keyframes svelte-1txcrnd-etzDo5sCAIn2_tr__tr {
+            0% {
+                transform: translate(12px, 12px) rotate(0)
+            }
+
+            to {
+                transform: translate(12px, 12px) rotate(1080deg)
+            }
+        }
+
+        .is-loading.svelte-1txcrnd #etzDo5sCAIn3_tr.svelte-1txcrnd {
+            animation: svelte-1txcrnd-etzDo5sCAIn3_tr__tr 3s cubic-bezier(.7, 0, .3, 1) infinite
+        }
+
+        @keyframes svelte-1txcrnd-etzDo5sCAIn3_tr__tr {
+            0% {
+                transform: translate(12px, 12px) rotate(0)
+            }
+
+            to {
+                transform: translate(12px, 12px) rotate(360deg)
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/7bADZx8i.css' %}">
+    <link rel="stylesheet" href="{% static 'css/P266Dxuv.css' %}">
+    <link rel="stylesheet" href="{% static 'css/iB6vhJ4S.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vfxaGUy2.css' %}">
+    <title>Stablecog | AI Image Generator</title>
+    <!-- HEAD_svelte-n0x47d_START -->
+    <!-- HEAD_svelte-n0x47d_END -->
+    <!-- HEAD_svelte-1g6k17e_START -->
+</head>
+
+<body app-version="5.66">
+    
+    <div style="background-image: url({% static 'illustrations/grid-on-dark.svg'%}); background-size: 24px; min-height: 100vh;min-height: 100svh;"
+        class="flex w-full flex-col bg-c-bg text-c-on-bg theme-dark color-scheme-dark  not-touch">
+        <nav style="position: fixed; top: 0; left: 0;"
+            class="z-60 flex w-full transform flex-col rounded-b-xl transition  bg-c-bg/0 shadow-navbar-0">
+            <div class="relative z-0 flex w-full flex-row items-center justify-between">
+                <div style="transform: scaleX(0%);"
+                    class="pointer-events-none absolute top-0 z-10 h-4px w-full origin-left rounded-full bg-c-primary  opacity-0">
+                </div>
+                <div class="flex min-w-0 flex-1 self-stretch md:flex-none xl:flex-1">
+                    <button aria-label="Toggle Drawer"
+                        class="group relative flex-shrink-0 self-stretch overflow-hidden p-0.5 md:hidden hidden">
+                        <div class="relative flex h-full items-center justify-center overflow-hidden px-2.5 py-3">
+                            <div class="absolute left-0 top-0 h-full w-full  p-1">
+                                <div class="relative z-0 h-full w-full overflow-hidden transition   rounded-lg">
+                                    <div
+                                        class="h-full w-full origin-left transform transition -translate-x-1/2 opacity-0 bg-c-primary/25 rounded-lg not-touch:group-hover:translate-x-0 not-touch:group-hover:translate-y-0 not-touch:group-hover:opacity-100">
+                                    </div>
+                                </div>
+                            </div>
+                            <svg class="h-8 w-8 transform text-c-on-bg transition 
+						not-touch:group-hover:text-c-primary " width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M2 5a1 1 0 0 1 1-1h18a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1Zm0 7a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1Zm1 6a1 1 0 1 0 0 2h18a1 1 0 1 0 0-2H3Z"
+                                    fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <a aria-label="Go to Home" href="/" data-sveltekit-preload-data="hover"
+                        class="group relative z-0 flex touch-manipulation items-center justify-center self-stretch rounded-lg px-2 py-3.5 md:rounded-xl md:px-3 md:py-4.5 flex md:flex">
+                        <div class="pointer-events-none absolute left-0 top-0 h-full w-full p-1.5"
+                            data-svelte-h="svelte-eqoyfo">
+                            <div class="relative z-0 h-full w-full overflow-hidden rounded-lg md:rounded-xl">
+                                <div
+                                    class="h-full w-full origin-left -translate-x-full transform rounded-lg bg-c-primary/25 transition not-touch:group-hover:translate-x-0 md:rounded-xl">
+                                </div>
+                            </div>
+                        </div>
+                        <svg class="h-9 w-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 32 32">
+                            <g>
+                                <path fill="url(#b-0.9896622934643571)"
+                                    d="M6.484 25.516c-.75.75-.759 1.984.105 2.601.292.208.591.401.897.58.559.324.871.97.704 1.595a.961.961 0 0 0 .68 1.177l1.857.498a.961.961 0 0 0 1.177-.68l.009-.032c.162-.608.74-1 1.368-1 .629 0 1.206.392 1.369 1l.008.032a.961.961 0 0 0 1.178.68l1.857-.498a.961.961 0 0 0 .68-1.177l-.009-.03c-.162-.607.136-1.233.68-1.547.544-.315 1.247-.267 1.692.178l.022.022a.961.961 0 0 0 1.36 0l1.359-1.36a.961.961 0 0 0 0-1.36l-.022-.021c-.445-.445-.492-1.148-.178-1.692.314-.545.94-.842 1.547-.68l.03.008a.961.961 0 0 0 1.178-.68l.497-1.857a.961.961 0 0 0-.68-1.177l-.032-.009c-.607-.162-1-.74-1-1.368 0-.629.393-1.206 1-1.369l.032-.008a.961.961 0 0 0 .68-1.178l-.497-1.857a.961.961 0 0 0-1.178-.68c-.624.168-1.27-.145-1.596-.703a11.557 11.557 0 0 0-1.82-2.362L6.484 25.516Z">
+                                </path>
+                                <path fill="url(#c-0.9896622934643571)"
+                                    d="M6.484 25.516c-.75.75-.759 1.984.105 2.601.292.208.591.401.897.58.559.324.871.97.704 1.595a.961.961 0 0 0 .68 1.177l1.857.498a.961.961 0 0 0 1.177-.68l.009-.032c.162-.608.74-1 1.368-1 .629 0 1.206.392 1.369 1l.008.032a.961.961 0 0 0 1.178.68l1.857-.498a.961.961 0 0 0 .68-1.177l-.009-.03c-.162-.607.136-1.233.68-1.547.544-.315 1.247-.267 1.692.178l.022.022a.961.961 0 0 0 1.36 0l1.359-1.36a.961.961 0 0 0 0-1.36l-.022-.021c-.445-.445-.492-1.148-.178-1.692.314-.545.94-.842 1.547-.68l.03.008a.961.961 0 0 0 1.178-.68l.497-1.857a.961.961 0 0 0-.68-1.177l-.032-.009c-.607-.162-1-.74-1-1.368 0-.629.393-1.206 1-1.369l.032-.008a.961.961 0 0 0 .68-1.178l-.497-1.857a.961.961 0 0 0-1.178-.68c-.624.168-1.27-.145-1.596-.703a11.557 11.557 0 0 0-1.82-2.362L6.484 25.516Z">
+                                </path>
+                                <path fill="url(#d-0.9896622934643571)"
+                                    d="M8.523 5.804a.961.961 0 0 1 0-1.36l1.36-1.359a.961.961 0 0 1 1.359 0l.022.022c.445.445 1.148.493 1.692.178.544-.314.842-.94.68-1.547l-.008-.03a.961.961 0 0 1 .68-1.177l1.856-.498a.961.961 0 0 1 1.178.68l.008.032c.163.608.74 1 1.369 1 .628 0 1.206-.392 1.368-1l.01-.032a.961.961 0 0 1 1.176-.68l1.858.498a.961.961 0 0 1 .68 1.177c-.168.624.145 1.27.703 1.596.306.178.605.37.896.579.865.617.857 1.85.106 2.6L10.562 21.439a11.552 11.552 0 0 1-1.82-2.362c-.325-.558-.972-.87-1.596-.704a.961.961 0 0 1-1.178-.68l-.497-1.856a.961.961 0 0 1 .68-1.178l.032-.008c.607-.163 1-.74 1-1.369 0-.628-.393-1.206-1-1.369l-.032-.008a.961.961 0 0 1-.68-1.178l.497-1.857a.961.961 0 0 1 1.178-.68l.03.009c.607.162 1.233-.135 1.547-.68.314-.544.267-1.247-.178-1.692l-.022-.022Z">
+                                </path>
+                                <path fill="url(#e-0.9896622934643571)" fill-rule="evenodd"
+                                    d="M8.93 5.398a.961.961 0 0 1 0-1.36l-.407.407a.961.961 0 0 0 0 1.359l.022.022c.445.445.492 1.148.178 1.692a1.79 1.79 0 0 1-.053.086 1.48 1.48 0 0 0 .46-.492c.314-.545.266-1.247-.179-1.692l-.022-.022ZM6.45 8.267a.959.959 0 0 0-.483.602l-.497 1.857a.961.961 0 0 0 .68 1.178l.032.008c.607.163 1 .74 1 1.369 0 .291-.084.571-.235.804.399-.254.642-.716.642-1.21 0-.629-.393-1.206-1-1.369l-.033-.008a.961.961 0 0 1-.68-1.178l.498-1.857a.965.965 0 0 1 .076-.196Zm-.497 6.468a.962.962 0 0 0-.483 1.1l.497 1.858a.961.961 0 0 0 1.178.68c.624-.168 1.27.145 1.596.703.49.844 1.097 1.639 1.82 2.362l.406-.406a11.553 11.553 0 0 1-1.82-2.362c-.325-.559-.972-.871-1.596-.704a.961.961 0 0 1-1.177-.68l-.498-1.857a.958.958 0 0 1 .077-.694Zm.93 10.381-.4.4c-.75.75-.759 1.984.105 2.601.292.208.591.401.897.579.559.325.871.972.704 1.596a.961.961 0 0 0 .68 1.177l1.857.498a.962.962 0 0 0 1.1-.483.958.958 0 0 1-.694.077l-1.857-.498a.961.961 0 0 1-.68-1.177c.167-.624-.145-1.271-.704-1.596a11.297 11.297 0 0 1-.896-.58c-.862-.614-.857-1.842-.112-2.594Zm5.593 5.373a1.49 1.49 0 0 1 .804-.235c.629 0 1.206.393 1.369 1l.008.033a.961.961 0 0 0 1.178.68l1.857-.498a.959.959 0 0 0 .603-.482.966.966 0 0 1-.197.076l-1.857.498a.961.961 0 0 1-1.177-.68l-.01-.033c-.162-.607-.74-1-1.368-1-.494 0-.956.243-1.21.642Zm6.481-1.721c.028-.019.057-.036.086-.053.544-.315 1.247-.267 1.692.178l.022.022a.961.961 0 0 0 1.36 0l.406-.406a.961.961 0 0 1-1.36 0l-.022-.023c-.444-.444-1.147-.492-1.692-.177a1.48 1.48 0 0 0-.492.459Zm4.779-4.778c.314-.21.705-.29 1.087-.188l.03.008a.962.962 0 0 0 1.101-.483.958.958 0 0 1-.694.077l-.03-.008c-.575-.154-1.167.104-1.495.594Zm1.72-6.482c.11-.069.23-.123.36-.158l.032-.009a.959.959 0 0 0 .603-.482.966.966 0 0 1-.196.076l-.033.009c-.326.087-.59.294-.765.564ZM20.58.11a.959.959 0 0 0-.483.603l-.009.032a1.29 1.29 0 0 1-.157.36c.27-.176.476-.44.564-.766l.009-.033A.96.96 0 0 1 20.58.11Zm-6.47.497a.962.962 0 0 0-.484 1.1l.008.03c.103.383.023.774-.187 1.089.49-.329.748-.92.594-1.494l-.008-.03a.958.958 0 0 1 .077-.695Z"
+                                    clip-rule="evenodd"></path>
+                                <path fill="url(#f-0.9896622934643571)" fill-rule="evenodd"
+                                    d="M9.477 3.491a.961.961 0 0 1 1.359 0l.022.022c.444.445 1.147.493 1.692.178a1.48 1.48 0 0 0 .491-.46 1.52 1.52 0 0 1-.085.054c-.544.315-1.247.267-1.692-.178l-.022-.022a.961.961 0 0 0-1.36 0l-.405.406Zm4.227-2.478a.964.964 0 0 1 .197-.076l1.857-.498a.961.961 0 0 1 1.177.68l.01.033c.162.607.74 1 1.368 1 .494 0 .956-.243 1.21-.642a1.482 1.482 0 0 1-.804.236c-.629 0-1.206-.393-1.369-1l-.008-.033a.961.961 0 0 0-1.178-.68l-1.857.498a.959.959 0 0 0-.603.482Zm6.469-.497a.958.958 0 0 1 .694-.077l1.857.498a.961.961 0 0 1 .68 1.177c-.167.624.145 1.271.704 1.596.305.178.605.37.896.579.864.617.857 1.85.106 2.601l.406-.406c.75-.751.759-1.984-.105-2.601a11.47 11.47 0 0 0-.897-.58c-.558-.324-.871-.97-.704-1.595A.961.961 0 0 0 23.13.53L21.275.033a.962.962 0 0 0-1.101.483Zm1.265 10.046-.406.406a11.55 11.55 0 0 1 1.82 2.362c.325.559.972.871 1.596.704a.961.961 0 0 1 1.177.68l.498 1.856a.958.958 0 0 1-.077.695.962.962 0 0 0 .483-1.1l-.497-1.858a.961.961 0 0 0-1.178-.68c-.624.168-1.27-.145-1.596-.703a11.557 11.557 0 0 0-1.82-2.362Zm3.614 7.353a1.434 1.434 0 0 0-.642 1.21c0 .629.393 1.206 1 1.369l.033.008a.961.961 0 0 1 .68 1.178l-.498 1.857a.971.971 0 0 1-.076.196c.23-.12.41-.332.483-.602l.497-1.858a.961.961 0 0 0-.68-1.177l-.032-.009c-.607-.162-1-.74-1-1.368 0-.291.084-.571.235-.805Zm-1.722 6.481c-.184.123-.343.29-.46.492-.314.544-.266 1.247.179 1.692l.022.022a.961.961 0 0 1 0 1.36l.406-.407a.961.961 0 0 0 0-1.36l-.022-.021c-.445-.445-.492-1.148-.178-1.692a1.79 1.79 0 0 1 .053-.086Zm-4.778 4.778c-.49.328-.748.92-.594 1.494l.008.03a.958.958 0 0 1-.077.695.962.962 0 0 0 .483-1.1l-.008-.03a1.331 1.331 0 0 1 .188-1.089Zm-6.481 1.722c-.27.175-.477.439-.565.765l-.008.032a.966.966 0 0 1-.077.197c.23-.12.41-.332.483-.603l.009-.032c.034-.13.088-.25.158-.36ZM5.548 15.14a.972.972 0 0 1 .196-.076l.033-.01a1.31 1.31 0 0 0 .765-.563 1.303 1.303 0 0 1-.359.158l-.032.008a.959.959 0 0 0-.603.483Zm.497-6.468a.958.958 0 0 1 .694-.077l.03.008c.575.154 1.166-.105 1.494-.594-.314.21-.705.29-1.087.188l-.03-.008a.962.962 0 0 0-1.101.483Z"
+                                    clip-rule="evenodd"></path>
+                            </g>
+                            <defs>
+                                <linearGradient id="b-0.9896622934643571" x1="21.519" x2="5.177" y1="10.713" y2="26.574"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#9866FF"></stop>
+                                    <stop offset="1" stop-color="#C3A6FF"></stop>
+                                </linearGradient>
+                                <linearGradient id="c-0.9896622934643571" x1="15.594" x2="18.031" y1="14.218"
+                                    y2="17.468" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#0F0F12" stop-opacity=".1"></stop>
+                                    <stop offset="1" stop-color="#0F0F12" stop-opacity="0"></stop>
+                                </linearGradient>
+                                <linearGradient id="d-0.9896622934643571" x1="10.657" x2="26.717" y1="21.344" y2="5.284"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#9866FF"></stop>
+                                    <stop offset="1" stop-color="#C3A6FF"></stop>
+                                </linearGradient>
+                                <linearGradient id="e-0.9896622934643571" x1="6.657" x2="17.219" y1="28.193" y2="16.818"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#9C6CFF"></stop>
+                                    <stop offset="1" stop-color="#925CFF"></stop>
+                                </linearGradient>
+                                <linearGradient id="f-0.9896622934643571" x1="16.38" x2="26.967" y1="14.763" y2="7.723"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#AD85FF"></stop>
+                                    <stop offset="1" stop-color="#CEB7FF"></stop>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </a>
+                </div>
+                <div class="hidden md:ml-2 md:flex md:max-w-[19rem] lg:max-w-[45rem] xl:ml-0 xl:max-w-[45rem]">
+                    <div
+                        class="rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-normal)] text-sm ring-c-bg-secondary relative flex items-stretch bg-c-bg ring-2 transition max-w-full">
+                        <div class="flex max-w-full md:pb-0 ">
+                            <div class="relative flex w-full">
+                                <div
+                                    class="pointer-events-none absolute left-0 top-0 z-0 h-full w-full overflow-hidden rounded-xl">
+                                    <div style="width: undefinedpx; transform: translateX(0px);"
+                                        class="absolute left-0 top-0 h-full transition px-0.5 py-1">
+                                        <div
+                                            class="h-full w-full rounded-lg bg-c-bg-secondary shadow-lg shadow-c-shadow/[var(--o-shadow-strong)]">
+                                        </div>
+                                    </div>
+                                </div>
+                                <a aria-label="Go to Generate" data-sveltekit-preload-data="hover" href="generate/"
+                                    class="group relative flex max-w-full items-center justify-center self-stretch
+					overflow-hidden whitespace-nowrap rounded-lg px-5 font-semibold transition-all py-4 group/navbar-tab-item relative">
+                                    <div class="absolute left-0 top-0 h-full w-full rounded-lg py-1 pl-1 pr-0.5">
+                                        <div class="relative z-0 h-full w-full overflow-hidden rounded-lg">
+                                            <div
+                                                class="h-full w-full origin-left transform rounded-lg transition translate-y-full bg-c-bg-secondary  group-hover:translate-y-0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex min-w-0 flex-shrink items-center justify-center gap-1.5">
+                                        <div
+                                            class="relative -m-0.5 h-6 w-6 flex-shrink-0 lg:my-0 lg:-ml-0.5 lg:mr-0 lg:h-5 lg:w-5">
+                                            <svg class="h-full w-full transition text-c-on-bg/75 " width="24"
+                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M7.28 3.83c.97.16 1.73.92 1.9 1.9.06.36.58.36.65 0 .16-.98.92-1.74 1.9-1.9.36-.07.36-.6 0-.66a2.31 2.31 0 0 1-1.9-1.9c-.07-.36-.6-.36-.66 0a2.31 2.31 0 0 1-1.9 1.9c-.36.07-.36.6 0 .66Zm11 11c.97.16 1.73.92 1.9 1.9.06.36.58.36.65 0 .16-.98.92-1.74 1.9-1.9.36-.07.36-.6 0-.66a2.31 2.31 0 0 1-1.9-1.9c-.07-.36-.6-.36-.66 0a2.31 2.31 0 0 1-1.9 1.9c-.36.07-.36.6 0 .66Zm1.9-9.1a2.31 2.31 0 0 0-1.9-1.9c-.37-.07-.37-.6 0-.66a2.31 2.31 0 0 0 1.9-1.9c.06-.36.58-.36.65 0 .16.98.92 1.74 1.9 1.9.36.07.36.6 0 .66-.98.16-1.74.92-1.9 1.9-.07.36-.6.36-.66 0Zm-6.64 1.2a2.5 2.5 0 0 1 3.53 3.53l-1.12 1.13-3.54-3.54 1.13-1.12Zm1.44 5.62-8.52 8.52a2.5 2.5 0 0 1-3.53-3.53l8.52-8.52 3.53 3.53Zm-3.53-1.6L3.89 18.5a1.14 1.14 0 0 0 1.61 1.6l7.55-7.55-1.6-1.6Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                            <svg class="absolute left-0 top-0 h-full w-full transition text-c-on-bg/75 hidden"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                            </svg>
+                                        </div>
+                                        <p
+                                            class="hidden lg:block min-w-0 flex-shrink select-none overflow-hidden overflow-ellipsis text-center transition text-c-on-bg/75">
+                                            Generate</p>
+                                    </div>
+                                </a>
+                                <a aria-label="Go to History" data-sveltekit-preload-data="hover" href="/history"
+                                    class="group relative flex max-w-full items-center justify-center self-stretch
+					overflow-hidden whitespace-nowrap rounded-lg px-5 font-semibold transition-all py-4 group/navbar-tab-item relative">
+                                    <div class="absolute left-0 top-0 h-full w-full rounded-lg px-0.5 py-1">
+                                        <div class="relative z-0 h-full w-full overflow-hidden rounded-lg">
+                                            <div
+                                                class="h-full w-full origin-left transform rounded-lg transition translate-y-full bg-c-bg-secondary  group-hover:translate-y-0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex min-w-0 flex-shrink items-center justify-center gap-1.5">
+                                        <div
+                                            class="relative -m-0.5 h-6 w-6 flex-shrink-0 lg:my-0 lg:-ml-0.5 lg:mr-0 lg:h-5 lg:w-5">
+                                            <svg class="h-full w-full transition text-c-on-bg/75 " width="24"
+                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5.25364 7.25C6.74775 5.13187 9.21301 3.75 12 3.75C16.5563 3.75 20.25 7.44365 20.25 12C20.25 16.5563 16.5563 20.25 12 20.25C7.44365 20.25 3.75 16.5563 3.75 12C3.75 11.5858 3.41421 11.25 3 11.25C2.58579 11.25 2.25 11.5858 2.25 12C2.25 17.3848 6.61522 21.75 12 21.75C17.3848 21.75 21.75 17.3848 21.75 12C21.75 6.61522 17.3848 2.25 12 2.25C9.08612 2.25 6.4716 3.52831 4.68552 5.55323V4C4.68552 3.58579 4.34973 3.25 3.93552 3.25C3.52131 3.25 3.18552 3.58579 3.18552 4V8C3.18552 8.41421 3.52131 8.75 3.93552 8.75H7C7.41421 8.75 7.75 8.41421 7.75 8C7.75 7.58579 7.41421 7.25 7 7.25H5.25364ZM12.75 7C12.75 6.58579 12.4142 6.25 12 6.25C11.5858 6.25 11.25 6.58579 11.25 7V12C11.25 12.4142 11.5858 12.75 12 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V7Z"
+                                                    fill="currentcolor"></path>
+                                            </svg>
+                                            <svg class="absolute left-0 top-0 h-full w-full transition text-c-on-bg/75 hidden"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                            </svg>
+                                        </div>
+                                        <p
+                                            class="hidden lg:block min-w-0 flex-shrink select-none overflow-hidden overflow-ellipsis text-center transition text-c-on-bg/75">
+                                            History</p>
+                                    </div>
+                                </a>
+                                <a aria-label="Go to Gallery" data-sveltekit-preload-data="hover" href="/gallery"
+                                    class="group relative flex max-w-full items-center justify-center self-stretch
+					overflow-hidden whitespace-nowrap rounded-lg px-5 font-semibold transition-all py-4 group/navbar-tab-item relative">
+                                    <div class="absolute left-0 top-0 h-full w-full rounded-lg px-0.5 py-1">
+                                        <div class="relative z-0 h-full w-full overflow-hidden rounded-lg">
+                                            <div
+                                                class="h-full w-full origin-left transform rounded-lg transition translate-y-full bg-c-bg-secondary  group-hover:translate-y-0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex min-w-0 flex-shrink items-center justify-center gap-1.5">
+                                        <div
+                                            class="relative -m-0.5 h-6 w-6 flex-shrink-0 lg:my-0 lg:-ml-0.5 lg:mr-0 lg:h-5 lg:w-5">
+                                            <svg class="h-full w-full transition text-c-on-bg/75 " width="24"
+                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5 2.25A3.75 3.75 0 0 0 1.25 6v12A3.75 3.75 0 0 0 5 21.75h14A3.75 3.75 0 0 0 22.75 18V6A3.75 3.75 0 0 0 19 2.25H5Zm16.25 11.94V6c0-1.24-1-2.25-2.25-2.25H5c-1.24 0-2.25 1-2.25 2.25v7.97l3.17-3.7a2.75 2.75 0 0 1 4.17 0l3.06 3.52 1.9-1.9a2.75 2.75 0 0 1 3.9 0l2.3 2.3Zm-7.12.74 1.99-1.99a1.25 1.25 0 0 1 1.76 0l3.37 3.37V18c0 1.24-1 2.25-2.25 2.25H5c-1.24 0-2.25-1-2.25-2.25v-1.72l4.3-5.03c.5-.58 1.4-.58 1.9 0l4.98 5.74a.75.75 0 0 0 1.14-.98l-.94-1.08ZM13.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                                                    fill="currentColor"></path>
+                                            </svg>
+                                            <svg class="absolute left-0 top-0 h-full w-full transition text-c-on-bg/75 hidden"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                            </svg>
+                                        </div>
+                                        <p
+                                            class="hidden lg:block min-w-0 flex-shrink select-none overflow-hidden overflow-ellipsis text-center transition text-c-on-bg/75">
+                                            Gallery</p>
+                                    </div>
+                                </a>
+                                <a aria-label="Go to Pricing" data-sveltekit-preload-data="hover" href="/pricing"
+                                    class="group relative flex max-w-full items-center justify-center self-stretch
+					overflow-hidden whitespace-nowrap rounded-lg px-5 font-semibold transition-all py-4 group/navbar-tab-item relative">
+                                    <div class="absolute left-0 top-0 h-full w-full rounded-lg px-0.5 py-1">
+                                        <div class="relative z-0 h-full w-full overflow-hidden rounded-lg">
+                                            <div
+                                                class="h-full w-full origin-left transform rounded-lg transition translate-y-full bg-c-bg-secondary  group-hover:translate-y-0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex min-w-0 flex-shrink items-center justify-center gap-1.5">
+                                        <div
+                                            class="relative -m-0.5 h-6 w-6 flex-shrink-0 lg:my-0 lg:-ml-0.5 lg:mr-0 lg:h-5 lg:w-5">
+                                            <svg class="h-full w-full transition text-c-on-bg/75 " width="24"
+                                                height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M2.25 18.75c5.34 0 10.65.7 15.8 2.1.72.2 1.45-.34 1.45-1.1v-1M18 10.5h.5m-13 0H6M2.25 5.62c0-.62.5-1.12 1.13-1.12h17.25c.62 0 1.12.5 1.12 1.13v9.75c0 .62-.5 1.12-1.13 1.12H3.38c-.6 0-1.12-.51-1.12-1.13V5.63ZM15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round"></path>
+                                            </svg>
+                                            <svg class="absolute left-0 top-0 h-full w-full transition text-c-on-bg/75 hidden"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                            </svg>
+                                        </div>
+                                        <p
+                                            class="hidden lg:block min-w-0 flex-shrink select-none overflow-hidden overflow-ellipsis text-center transition text-c-on-bg/75">
+                                            Pricing</p>
+                                    </div>
+                                </a>
+                                <button  id="resourcesButton" aria-label="Go to Resources"
+                                    class="group relative flex max-w-full items-center justify-center self-stretch
+					overflow-hidden whitespace-nowrap rounded-lg px-5 font-semibold transition-all py-4 group/navbar-tab-item relative touch-manipulation">
+                                    <div class="absolute left-0 top-0 h-full w-full rounded-lg py-1 pl-0.5 pr-1">
+                                        <div class="relative z-0 h-full w-full overflow-hidden rounded-lg">
+                                            <div
+                                                class="h-full w-full origin-left transform rounded-lg transition -translate-y-full bg-c-bg-secondary  group-hover:translate-y-0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="relative flex min-w-0 flex-shrink items-center justify-center gap-1.5">
+                                        <div
+                                            class="relative -m-0.5 h-6 w-6 flex-shrink-0 lg:my-0 lg:-ml-0.5 lg:mr-0 lg:h-5 lg:w-5">
+                                            <svg class="h-full w-full transition text-c-on-bg/75 group-hover:translate-y-2 group-hover/navbar-tab-item:opacity-0"
+                                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M20.25 12v-.63A3.37 3.37 0 0 0 16.87 8h-1.5a1.13 1.13 0 0 1-1.12-1.13v-1.5A3.37 3.37 0 0 0 10.87 2m.13 9.75h5.5m-5.5 3h2.75M7.25 5.5v-2c0-.83.67-1.5 1.5-1.5h2.5a9 9 0 0 1 9 9v6c0 .83-.67 1.5-1.5 1.5h-2m-9.5-13V17c0 .83.67 1.5 1.5 1.5h8m-9.5-13h-2c-.83 0-1.5.67-1.5 1.5v13.5c0 .83.67 1.5 1.5 1.5h10c.83 0 1.5-.67 1.5-1.5v-2"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round"></path>
+                                            </svg>
+                                            <svg class="absolute left-0 top-0 h-full w-full transition text-c-on-bg/75 -translate-y-2 opacity-0 group-hover:translate-y-0 group-hover/navbar-tab-item:opacity-100"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                            </svg>
+                                        </div>
+                                        <p
+                                            class="hidden lg:block min-w-0 flex-shrink select-none overflow-hidden overflow-ellipsis text-center transition text-c-on-bg/75">
+                                            Resources</p>
+                                    </div>
+                                </button>
+                                <div slot="dropdown" class="block absolute bottom-0 right-0">
+                                    {% comment %} <div class="bg-c-bg-secondary ring-2 ring-c-bg-tertiary transition-all rounded-xl absolute flex flex-col justify-start shadow-xl shadow-c-shadow/[var(--o-shadow-strongest)] top-0 right-0 z-50 overflow-hidden w-192 max-w-[calc(100vw-1.25rem)] md:w-56 md:max-w-[calc(100vw-1.25rem)]" style="position: absolute; left: -224px; top: 2px;">
+                                        <div class="relative z-0 flex w-full flex-col justify-start overflow-hidden">
+                                           <div class="relative flex min-h-0 w-full flex-1 flex-col">
+                                              <div class="hide-scrollbar flex max-h-[calc(80vh-4rem)] w-full flex-col justify-start transition-all duration-100 md:max-h-[calc(80vh-4rem)] min-h-0 flex-1 overflow-auto" style="position: relative;">
+                                                 <div class="flex w-full flex-col items-start justify-start">
+                                                    <a href="/guide" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0 -mt-1 overflow-hidden first-of-type:mt-0 w-full">
+                                                       <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center px-1 py-1">
+                                                          <div class="h-full w-full overflow-hidden rounded-lg">
+                                                             <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                          </div>
+                                                       </div>
+                                                       <div class="flex min-w-0 flex-1 items-center justify-start gap-2.5">
+                                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-c-on-bg transition not-touch:group-hover:text-c-primary">
+                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"></path>
+                                                          </svg>
+                                                          <p class="min-w-0 flex-1 overflow-hidden overflow-ellipsis text-left text-c-on-bg transition not-touch:group-hover:text-c-primary">Guide</p>
+                                                       </div>
+                                                    </a>
+                                                    <a href="/blog" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0 -mt-1 overflow-hidden first-of-type:mt-0 w-full">
+                                                       <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center px-1 py-1">
+                                                          <div class="h-full w-full overflow-hidden rounded-lg">
+                                                             <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                          </div>
+                                                       </div>
+                                                       <div class="flex min-w-0 flex-1 items-center justify-start gap-2.5">
+                                                          <svg class="text-c-on-bg h-6 w-6 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M6.75 3a.75.75 0 0 0-1.5 0v2.5c0 1.3.91 2.4 2.14 2.68l-1.3 1.46a3.75 3.75 0 0 0-.15 4.79l5.47 7.03a.75.75 0 0 0 1.18 0l5.47-7.03a3.75 3.75 0 0 0-.16-4.8l-1.29-1.45a2.75 2.75 0 0 0 2.14-2.68V3a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H8c-.69 0-1.25-.56-1.25-1.25V3Zm.47 7.63 2.12-2.38h5.32l2.12 2.38c.72.81.76 2.02.1 2.88l-4.13 5.3V13.3a1.5 1.5 0 1 0-1.5 0v5.51l-4.13-5.3a2.25 2.25 0 0 1 .1-2.88Z" fill="currentColor"></path>
+                                                          </svg>
+                                                          <p class="min-w-0 flex-1 overflow-hidden overflow-ellipsis text-left text-c-on-bg transition not-touch:group-hover:text-c-primary">Blog</p>
+                                                       </div>
+                                                    </a>
+                                                    <a href="/docs/v1" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0 -mt-1 overflow-hidden first-of-type:mt-0 w-full">
+                                                       <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center px-1 py-1">
+                                                          <div class="h-full w-full overflow-hidden rounded-lg">
+                                                             <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                          </div>
+                                                       </div>
+                                                       <div class="flex min-w-0 flex-1 items-center justify-start gap-2.5">
+                                                          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-c-on-bg h-6 w-6 transition not-touch:group-hover:text-c-primary">
+                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"></path>
+                                                          </svg>
+                                                          <p class="min-w-0 flex-1 overflow-hidden overflow-ellipsis text-left text-c-on-bg transition not-touch:group-hover:text-c-primary">Developers</p>
+                                                       </div>
+                                                    </a>
+                                                    <a href="/live" data-sveltekit-preload-data="hover" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0 -mt-1 overflow-hidden first-of-type:mt-0 w-full">
+                                                       <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center px-1 py-1">
+                                                          <div class="h-full w-full overflow-hidden rounded-lg">
+                                                             <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                          </div>
+                                                       </div>
+                                                       <div class="flex min-w-0 flex-1 items-center justify-start gap-2.5">
+                                                          <svg class="text-c-on-bg h-6 w-6 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M5.559 4.286A1 1 0 0 1 5.573 5.7 8.968 8.968 0 0 0 3 12c0 2.453.98 4.676 2.573 6.3a1 1 0 1 1-1.429 1.4A10.967 10.967 0 0 1 1 12c0-2.998 1.2-5.717 3.144-7.7a1 1 0 0 1 1.415-.014Zm12.882 0a1 1 0 0 1 1.415.014A10.967 10.967 0 0 1 23 12c0 2.998-1.2 5.717-3.145 7.7a1 1 0 1 1-1.428-1.4A8.967 8.967 0 0 0 21 12c0-2.453-.98-4.676-2.573-6.3a1 1 0 0 1 .014-1.414ZM8.195 7.255a1 1 0 0 1 .078 1.412A4.978 4.978 0 0 0 7 12c0 1.281.48 2.448 1.273 3.333a1 1 0 1 1-1.49 1.334A6.977 6.977 0 0 1 5 12c0-1.792.675-3.43 1.783-4.667a1 1 0 0 1 1.412-.078Zm7.61 0a1 1 0 0 1 1.412.078A6.977 6.977 0 0 1 19 12c0 1.792-.675 3.43-1.783 4.667a1 1 0 1 1-1.49-1.334A4.978 4.978 0 0 0 17 12c0-1.281-.48-2.448-1.273-3.333a1 1 0 0 1 .078-1.412ZM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" fill="currentColor"></path>
+                                                          </svg>
+                                                          <p class="min-w-0 flex-1 overflow-hidden overflow-ellipsis text-left text-c-on-bg transition not-touch:group-hover:text-c-primary">Live</p>
+                                                       </div>
+                                                    </a>
+                                                    <div class="h-2px w-full bg-c-bg-tertiary"></div>
+                                                    <div class="flex w-full flex-wrap">
+                                                       <a href="/discord" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M18.942 5.297A16.29 16.29 0 0 0 14.816 4a12.09 12.09 0 0 0-.529 1.097 15.153 15.153 0 0 0-4.573 0A11.724 11.724 0 0 0 9.18 4 16.235 16.235 0 0 0 5.05 5.3C2.44 9.246 1.731 13.094 2.085 16.887a16.5 16.5 0 0 0 5.06 2.593c.41-.564.773-1.16 1.084-1.785a10.66 10.66 0 0 1-1.706-.83c.142-.106.282-.217.418-.331 3.29 1.539 6.866 1.539 10.118 0 .136.114.276.224.418.33-.544.329-1.116.607-1.71.833.314.627.675 1.224 1.084 1.785a16.461 16.461 0 0 0 5.064-2.595c.415-4.397-.71-8.21-2.973-11.59ZM8.678 14.554c-.988 0-1.798-.922-1.798-2.045 0-1.123.792-2.047 1.798-2.047 1.005 0 1.815.922 1.798 2.047.001 1.123-.793 2.045-1.798 2.045Zm6.644 0c-.988 0-1.798-.922-1.798-2.045 0-1.123.793-2.047 1.798-2.047 1.006 0 1.816.922 1.798 2.047 0 1.123-.793 2.045-1.798 2.045Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                       <a href="/twitter" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M21.75 5.96a8.015 8.015 0 0 1-2.301.619 3.986 3.986 0 0 0 1.757-2.203 7.89 7.89 0 0 1-2.535.965 3.986 3.986 0 0 0-2.92-1.263 3.996 3.996 0 0 0-3.997 3.999c0 .309.038.618.098.916a11.358 11.358 0 0 1-8.24-4.184 3.968 3.968 0 0 0-.544 2.018c0 1.388.706 2.611 1.781 3.33a4.03 4.03 0 0 1-1.807-.508v.05a3.997 3.997 0 0 0 3.204 3.923c-.343.09-.697.135-1.052.136-.26 0-.506-.026-.755-.061a4.004 4.004 0 0 0 3.736 2.773 8.01 8.01 0 0 1-4.962 1.708c-.335 0-.644-.012-.965-.05a11.317 11.317 0 0 0 6.138 1.794c7.35 0 11.372-6.09 11.372-11.374 0-.174 0-.347-.012-.52A8.61 8.61 0 0 0 21.75 5.96Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                       <a href="/instagram" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M11.997 6.869a5.124 5.124 0 0 0-5.13 5.13c0 2.84 2.29 5.132 5.13 5.132s5.131-2.292 5.131-5.131c0-2.84-2.291-5.131-5.13-5.131Zm0 8.466A3.342 3.342 0 0 1 8.663 12a3.342 3.342 0 0 1 3.334-3.335A3.342 3.342 0 0 1 15.332 12a3.342 3.342 0 0 1-3.335 3.335Zm5.341-9.872c-.663 0-1.198.535-1.198 1.198 0 .663.535 1.199 1.198 1.199a1.195 1.195 0 0 0 1.108-1.657 1.198 1.198 0 0 0-1.108-.74ZM21.998 12c0-1.381.013-2.75-.064-4.128-.078-1.601-.443-3.022-1.614-4.193-1.173-1.173-2.591-1.536-4.192-1.613C14.747 1.988 13.378 2 12 2c-1.381 0-2.75-.013-4.128.065-1.601.077-3.022.443-4.193 1.613-1.173 1.174-1.536 2.592-1.613 4.193C1.988 9.253 2 10.622 2 12c0 1.378-.013 2.75.065 4.128.077 1.6.443 3.021 1.613 4.192 1.174 1.174 2.592 1.536 4.193 1.614 1.381.077 2.75.065 4.128.065 1.38 0 2.75.012 4.128-.065 1.6-.078 3.021-.443 4.192-1.614 1.174-1.173 1.536-2.591 1.614-4.192.08-1.379.065-2.747.065-4.128Zm-2.2 5.899a3.177 3.177 0 0 1-.756 1.145c-.353.353-.69.573-1.146.756-1.316.523-4.44.405-5.899.405-1.458 0-4.585.118-5.901-.403a3.178 3.178 0 0 1-1.146-.755 3.2 3.2 0 0 1-.755-1.146c-.52-1.318-.403-4.443-.403-5.901 0-1.459-.118-4.586.403-5.902.182-.455.402-.795.755-1.145s.69-.573 1.146-.756c1.316-.52 4.443-.403 5.901-.403 1.459 0 4.586-.117 5.902.403.455.183.795.403 1.145.756a3.2 3.2 0 0 1 .756 1.145c.52 1.316.403 4.443.403 5.902 0 1.458.117 4.583-.406 5.899Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                       <a href="mailto:hello@stablecog.com" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 11.858 2.403 7.061A2.4 2.4 0 0 1 4.8 4.8h14.4a2.4 2.4 0 0 1 2.396 2.26L12 11.859Zm0 2.684 9.6-4.8V16.8a2.4 2.4 0 0 1-2.4 2.4H4.8a2.4 2.4 0 0 1-2.4-2.4V9.742l9.6 4.8Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                       <a href="/producthunt" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Zm-1.5-10h2.833a1.5 1.5 0 1 0 0-3H10.5v3Zm-2-5h4.833a3.5 3.5 0 0 1 0 7H10.5v3h-2V7Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                       <a href="/github" target="_blank" data-sveltekit-preload-data="off" class="flex items-center justify-center px-5 font-semibold py-4 group relative z-0  w-1/3">
+                                                          <div class="pointer-events-none absolute left-0 top-0 flex h-full w-full items-center justify-center p-1">
+                                                             <div class="h-full w-full overflow-hidden rounded-lg">
+                                                                <div class="aspect-square h-full w-full origin-left -translate-x-full transform bg-c-primary/10 opacity-0 rounded-lg  transition not-touch:group-hover:translate-x-0 not-touch:group-hover:opacity-100"></div>
+                                                             </div>
+                                                          </div>
+                                                          <div class="-mx-2 -my-0.5 flex min-w-0 flex-1 items-center justify-center gap-2.5">
+                                                             <svg class="h-7 w-7 text-c-on-bg/60 transition not-touch:group-hover:text-c-primary" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M12.001 2C6.475 1.998 2 6.593 2 12.264c0 4.485 2.8 8.297 6.699 9.697.525.135.444-.248.444-.51v-1.778c-3.032.365-3.155-1.696-3.358-2.04-.411-.721-1.383-.905-1.093-1.25.69-.364 1.395.093 2.21 1.33.59.897 1.74.746 2.324.596.127-.539.4-1.021.775-1.395-3.141-.578-4.45-2.548-4.45-4.889 0-1.136.364-2.18 1.079-3.022-.456-1.389.042-2.578.11-2.755 1.297-.119 2.647.955 2.752 1.04.737-.204 1.58-.312 2.522-.312.948 0 1.793.112 2.537.319.252-.197 1.503-1.12 2.71-1.008.065.177.552 1.338.123 2.709.724.844 1.092 1.898 1.092 3.036 0 2.346-1.318 4.317-4.468 4.887.27.272.484.597.63.956.146.358.221.743.22 1.132v2.582c.019.207 0 .411.336.411C19.151 20.63 22 16.79 22 12.266 22 6.593 17.522 2 12.001 2Z" fill="currentColor"></path>
+                                                             </svg>
+                                                          </div>
+                                                       </a>
+                                                    </div>
+                                                 </div>
+                                                 <iframe style="display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; border: 0; opacity: 0; pointer-events: none; z-index: -1;" aria-hidden="true" tabindex="-1" src="about:blank"></iframe>
+                                              </div>
+                                           </div>
+                                        </div>
+                                     </div> {% endcomment %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative flex flex-wrap items-center justify-end md:flex-1">
+                    <a aria-describedby="9Dw01Egx7D" id="4-j9_4lRoq" data-state="closed" data-melt-tooltip-trigger=""
+                        href="/discord" target="_blank" data-sveltekit-preload-data="off"
+                        class="group/iconbutton touch-manipulation rounded-full py-2" aria-label="Discord">
+                        <div class="relative z-0 overflow-hidden rounded-full p-2">
+                            <div
+                                class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                            </div>
+                            <div class="relative">
+                                <div class="transition ">
+                                    <svg class="relative h-7.5 w-7.5 transform transition text-c-on-bg not-touch:group-hover/iconbutton:text-c-primary"
+                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M18.942 5.297A16.29 16.29 0 0 0 14.816 4a12.09 12.09 0 0 0-.529 1.097 15.153 15.153 0 0 0-4.573 0A11.724 11.724 0 0 0 9.18 4 16.235 16.235 0 0 0 5.05 5.3C2.44 9.246 1.731 13.094 2.085 16.887a16.5 16.5 0 0 0 5.06 2.593c.41-.564.773-1.16 1.084-1.785a10.66 10.66 0 0 1-1.706-.83c.142-.106.282-.217.418-.331 3.29 1.539 6.866 1.539 10.118 0 .136.114.276.224.418.33-.544.329-1.116.607-1.71.833.314.627.675 1.224 1.084 1.785a16.461 16.461 0 0 0 5.064-2.595c.415-4.397-.71-8.21-2.973-11.59ZM8.678 14.554c-.988 0-1.798-.922-1.798-2.045 0-1.123.792-2.047 1.798-2.047 1.005 0 1.815.922 1.798 2.047.001 1.123-.793 2.045-1.798 2.045Zm6.644 0c-.988 0-1.798-.922-1.798-2.045 0-1.123.793-2.047 1.798-2.047 1.006 0 1.816.922 1.798 2.047 0 1.123-.793 2.045-1.798 2.045Z"
+                                            fill="currentColor"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="flex items-center justify-end pl-2 pr-3.5 md:pl-2.5 md:pr-5">
+                        <div class="py-2.5">
+                            <button
+                                class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold px-4.5 py-3 text-sm rounded-lg2 shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary   -mr-1  svelte-1acvjgn">
+                                <div style="width: NaNpx; height: NaNpx;"
+                                    class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                                    <div
+                                        class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-enabled:group-hover:translate-x-0">
+                                    </div>
+                                </div>
+                                <div class="relative flex items-center justify-center gap-3">Get Started </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <main class="relative flex w-full flex-1 flex-col break-words">
+            <section id="hero"
+                class="flex h-[100svh] min-h-[25rem] w-full flex-col items-center justify-between pb-[calc(env(safe-area-inset-bottom)+2rem)] md:min-h-[40rem] md:flex-row">
+                <div
+                    class="order-2 flex flex-col items-center px-6 pb-8 pt-6 md:order-1 md:items-start md:py-12 md:pl-[max(calc((100%-1280px)/2+4rem),4rem)] md:pr-6 xl:pr-16">
+                    <h1
+                        class="max-w-[18rem] flex-1 text-center text-3xl font-semibold leading-tight md:max-w-[22rem] md:text-left md:text-4xl md:leading-tight lg:max-w-[30.25rem] lg:text-5xl lg:leading-tight">
+                        Create amazing art in seconds with AI.</h1>
+                    <a href="myapp/generate?smo=true" data-sveltekit-preload-data="hover"
+                        class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold p-0 text-base rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary  mt-5 w-full max-w-[15rem] px-6 py-4 md:px-8  svelte-1acvjgn">
+                        <div style="width: NaNpx; height: NaNpx;"
+                            class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                            <div
+                                class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-hover:translate-x-0">
+                            </div>
+                        </div>
+                        <div class="relative flex items-center justify-center gap-3">Get Started </div>
+                    </a>
+                </div>
+                <div
+                    class="relative order-1 flex min-h-0 w-full flex-1 flex-col items-end justify-end pl-12 md:order-2 md:h-full md:pl-0">
+                    <div class="relative w-full flex-1 flex-col overflow-hidden md:h-full">
+                        <img style="
+					-webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxOTIwIiB2aWV3Qm94PSIwIDAgMTkyMCAxOTIwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgICA8cGF0aCBkPSJNMjMyLTE4M1MzNy44IDY3LjUgMjAgMjI1QzIuMTkgMzgyLjUgOTkgNDUzIDk5IDYxM1MtLjc4IDg5Mi44OCAyNCAxMDM2czEwOC4xOSAxNTYuNSAxNjYgMjg0LTQ1LjU2IDMyMS4wNiA4MSA0MTcgMjc5IDE1LjM4IDQzOSAzNmMxNjAgMjAuNjIgMjEyLjc1IDEzMCAzNTQgMTMwczE4OC4zMS04NSA0MTMtODUgNTIxLjQ0IDIxMC42MiA2MzMtMjUwVi0xODNIMjMyWiIgZmlsbD0iIzAwMCIvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMTkyMHYxOTIwSDB6Ii8+CiAgICA8L2NsaXBQYXRoPgogIDwvZGVmcz4KPC9zdmc+Cg==');
+					mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxOTIwIiB2aWV3Qm94PSIwIDAgMTkyMCAxOTIwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgICA8cGF0aCBkPSJNMjMyLTE4M1MzNy44IDY3LjUgMjAgMjI1QzIuMTkgMzgyLjUgOTkgNDUzIDk5IDYxM1MtLjc4IDg5Mi44OCAyNCAxMDM2czEwOC4xOSAxNTYuNSAxNjYgMjg0LTQ1LjU2IDMyMS4wNiA4MSA0MTcgMjc5IDE1LjM4IDQzOSAzNmMxNjAgMjAuNjIgMjEyLjc1IDEzMCAzNTQgMTMwczE4OC4zMS04NSA0MTMtODUgNTIxLjQ0IDIxMC42MiA2MzMtMjUwVi0xODNIMjMyWiIgZmlsbD0iIzAwMCIvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMTkyMHYxOTIwSDB6Ii8+CiAgICA8L2NsaXBQYXRoPgogIDwvZGVmcz4KPC9zdmc+Cg==');
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					mask-size: cover;
+					-webkit-mask-size: cover;
+					mask-position: left bottom;
+					-webkit-mask-position: left bottom;
+				" class="h-full w-full object-cover object-[25%_100%] md:object-[40%_100%] lg:object-left-bottom absolute right-0 top-0 filter blur-2xl"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACwElEQVR4AQXBQ4M8RxwA0Kr6VVtjrnq9G9t2cotxzDW3XPNlglNs2/ba9s60VV39fw/X8SVPdJ/93//7wHd1quzE2wZqabjEMFFp5Zwt7PHvRaRdYT++71HOMFWotO3uCpkFLB81L26INhA1E8Q+87KUd+WbtXwyZJtd8ypRImF4DoCxyI22PCbKahCRrjlqtuy9aGNUL8tmkytQbU9b5amIkE59jOTrNMrTkqrWxM6wJa35PWSZ2/G/i0cf2/Vnrpic2IYewxIouqwIl9Zqf0Y5pRh0anhxrkhwa/uSX/s/bm1/ryF17mSupNZuvnKGCFm5bKiWfNsVQ1/++i/lBT7PTi6vWAD0s72Xvjn+ooOunZSvTnm0fryr/KXcdov94N0NYqDFv7bCPqciqixFv5f73fMQr7LtKfSQCHI/7jfloYbVVEt6lhLChLnfz59/4bV/0QodgKtkGi/HfxA2PEvu71qDhqGFvC+KtFFqNyvK2FDzzXfWvvniAAunSXYCBtEN0tRAx0Xe54HDTutaaWpgxtQMQRYkST8+DV//5Ltj5+BE+u+EbYGIlXX2N0JIFfGQZiHOT/oxJapulfv93s7R5vf//mnkLaz0/gjfzFCGNVQnWK7KFsoFwOgy5WrKhkSlbmmDjh96zmnC93vCxilbhMIsii4oaJDiVMKGbY6kiK2Hm266a4jJDVMTMrBF989l/vlBuoC5pZGOV2zCbepzAhTrybwpaSrAWVBc3L75sqkrN3tzn+y88p//Q85BwjrGRZ9v62QaSsQcli6VsLzu/x9F8s3GI5cP3jg1bL//15u/O19SZNWgaZJqhtgYvTspXOjnTpI7OlFZTifEm2u4zpNIUIVbL72pBZNFgL3sLOFZHeyzYvmY/wNNsNMiYUwqkSlAEuZcywUeMz/gclqvZENCVmKI7+dzfnEsYe0CMh9IzfPOP54AAAAASUVORK5CYII="
+                            alt="Hero" width="1920" height="1920">
+                        <img style="
+					-webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxOTIwIiB2aWV3Qm94PSIwIDAgMTkyMCAxOTIwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgICA8cGF0aCBkPSJNMjMyLTE4M1MzNy44IDY3LjUgMjAgMjI1QzIuMTkgMzgyLjUgOTkgNDUzIDk5IDYxM1MtLjc4IDg5Mi44OCAyNCAxMDM2czEwOC4xOSAxNTYuNSAxNjYgMjg0LTQ1LjU2IDMyMS4wNiA4MSA0MTcgMjc5IDE1LjM4IDQzOSAzNmMxNjAgMjAuNjIgMjEyLjc1IDEzMCAzNTQgMTMwczE4OC4zMS04NSA0MTMtODUgNTIxLjQ0IDIxMC42MiA2MzMtMjUwVi0xODNIMjMyWiIgZmlsbD0iIzAwMCIvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMTkyMHYxOTIwSDB6Ii8+CiAgICA8L2NsaXBQYXRoPgogIDwvZGVmcz4KPC9zdmc+Cg==');
+					mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxOTIwIiB2aWV3Qm94PSIwIDAgMTkyMCAxOTIwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGNsaXAtcGF0aD0idXJsKCNhKSI+CiAgICA8cGF0aCBkPSJNMjMyLTE4M1MzNy44IDY3LjUgMjAgMjI1QzIuMTkgMzgyLjUgOTkgNDUzIDk5IDYxM1MtLjc4IDg5Mi44OCAyNCAxMDM2czEwOC4xOSAxNTYuNSAxNjYgMjg0LTQ1LjU2IDMyMS4wNiA4MSA0MTcgMjc5IDE1LjM4IDQzOSAzNmMxNjAgMjAuNjIgMjEyLjc1IDEzMCAzNTQgMTMwczE4OC4zMS04NSA0MTMtODUgNTIxLjQ0IDIxMC42MiA2MzMtMjUwVi0xODNIMjMyWiIgZmlsbD0iIzAwMCIvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMTkyMHYxOTIwSDB6Ii8+CiAgICA8L2NsaXBQYXRoPgogIDwvZGVmcz4KPC9zdmc+Cg==');
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					mask-size: cover;
+					-webkit-mask-size: cover;
+					mask-position: left bottom;
+					-webkit-mask-position: left bottom;
+				" class="h-full w-full object-cover object-[25%_100%] md:object-[40%_100%] lg:object-left-bottom" srcset="
+                    {% static 'image/hero-v2-512.webp' %} 512w,
+                    {% static 'image/hero-v2-768.webp' %} 768w,
+                    {% static 'image/hero-v2-1024.webp' %} 1024w,
+                    {% static 'image/hero-v2-1440.webp' %} 1440w,
+                    {% static 'image/hero-v2-1920.webp' %} 1920w,
+                    
+				" sizes="(min-width: 768px) 50vw, 100vw" src="{% static 'image/hero-v2-1920.webp' %}"  alt="Hero" width="1920"
+                            height="1920">
+                        <img class="w-full h-full absolute right-0 top-0 object-cover object-left-bottom"
+                            src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxOTIwIiB2aWV3Qm94PSIwIDAgMTkyMCAxOTIwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF84NjRfNTc1OTMpIj4KICAgIDxnIGZpbHRlcj0idXJsKCNhKSI+CiAgICAgIDxwYXRoIGQ9Ik0yMzItMTgzUzM3LjggNjcuNSAyMCAyMjVDMi4xOSAzODIuNSA5OSA0NTMgOTkgNjEzUy0uNzggODkyLjg4IDI0IDEwMzZzMTA4LjE5IDE1Ni41IDE2NiAyODQtNDUuNTYgMzIxLjA2IDgxIDQxNyAyNzkgMTUuMzggNDM5IDM2YzE2MCAyMC42MiAyMTIuNzUgMTMwIDM1NCAxMzBzMTg4LjMxLTg1IDQxMy04NSA1MjEuNDQgMjEwLjYyIDYzMy0yNTBWLTE4M0gyMzJaIiBmaWxsPSIjMDAwIiBmaWxsLW9wYWNpdHk9Ii4wMSIvPgogICAgPC9nPgogICAgPHBhdGggZD0iTTIzMi0xODNTMzcuOCA2Ny41IDIwIDIyNUMyLjE5IDM4Mi41IDk5IDQ1MyA5OSA2MTNTLS43OCA4OTIuODggMjQgMTAzNnMxMDguMTkgMTU2LjUgMTY2IDI4NC00NS41NiAzMjEuMDYgODEgNDE3IDI3OSAxNS4zOCA0MzkgMzZjMTYwIDIwLjYyIDIxMi43NSAxMzAgMzU0IDEzMHMxODguMzEtODUgNDEzLTg1IDUyMS40NCAyMTAuNjIgNjMzLTI1MFYtMTgzSDIzMloiIHN0cm9rZT0iIzE2MTYxQiIgc3Ryb2tlLXdpZHRoPSIyMCIvPgogIDwvZz4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9ImEiIHg9IjcuODEiIHk9Ii0xOTMiIHdpZHRoPSIyMTEyLjE5IiBoZWlnaHQ9IjIxMDYiIGZpbHRlclVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY29sb3ItaW50ZXJwb2xhdGlvbi1maWx0ZXJzPSJzUkdCIj4KICAgICAgPGZlRmxvb2QgZmxvb2Qtb3BhY2l0eT0iMCIgcmVzdWx0PSJCYWNrZ3JvdW5kSW1hZ2VGaXgiLz4KICAgICAgPGZlQmxlbmQgaW49IlNvdXJjZUdyYXBoaWMiIGluMj0iQmFja2dyb3VuZEltYWdlRml4IiByZXN1bHQ9InNoYXBlIi8+CiAgICAgIDxmZUNvbG9yTWF0cml4IGluPSJTb3VyY2VBbHBoYSIgdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAxMjcgMCIgcmVzdWx0PSJoYXJkQWxwaGEiLz4KICAgICAgPGZlT2Zmc2V0Lz4KICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTI1Ii8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbjI9ImhhcmRBbHBoYSIgb3BlcmF0b3I9ImFyaXRobWV0aWMiIGsyPSItMSIgazM9IjEiLz4KICAgICAgPGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAxIDAiLz4KICAgICAgPGZlQmxlbmQgaW4yPSJzaGFwZSIgcmVzdWx0PSJlZmZlY3QxX2lubmVyU2hhZG93Xzg2NF81NzU5MyIvPgogICAgICA8ZmVDb2xvck1hdHJpeCBpbj0iU291cmNlQWxwaGEiIHZhbHVlcz0iMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMTI3IDAiIHJlc3VsdD0iaGFyZEFscGhhIi8+CiAgICAgIDxmZU9mZnNldC8+CiAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjUwIi8+CiAgICAgIDxmZUNvbXBvc2l0ZSBpbjI9ImhhcmRBbHBoYSIgb3BlcmF0b3I9ImFyaXRobWV0aWMiIGsyPSItMSIgazM9IjEiLz4KICAgICAgPGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAxIDAiLz4KICAgICAgPGZlQmxlbmQgaW4yPSJlZmZlY3QxX2lubmVyU2hhZG93Xzg2NF81NzU5MyIgcmVzdWx0PSJlZmZlY3QyX2lubmVyU2hhZG93Xzg2NF81NzU5MyIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgo8L3N2Zz4K"
+                            alt="Hero Outline" width="1920" height="1920">
+                    </div>
+                </div>
+            </section>
+            <section id="describe-anything"
+                class="flex w-full flex-col items-center justify-between lg:h-[calc(100svh-env(safe-area-inset-bottom)-10rem)] lg:min-h-[40rem] lg:flex-row">
+                <div
+                    class="relative flex min-h-0 w-full flex-1 flex-col items-center justify-start lg:h-full lg:flex-row lg:items-center lg:justify-center">
+                    <div
+                        class="relative order-2 flex h-auto w-full min-w-0 justify-end lg:order-1 lg:h-full lg:flex-1 lg:pr-0">
+                        <div
+                            class="relative -ml-[6%] flex h-full justify-end overflow-hidden pr-[6%] md:-ml-[6%] md:pr-[6%] lg:ml-0 lg:pr-0">
+                            <div class="relative aspect-[5/4] h-full">
+                                <img style="
+              -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxNTM2IiB2aWV3Qm94PSIwIDAgMTkyMCAxNTM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Ik0xODQ1IDU1YzExMi44NyA2MCAyNi41IDIxMS41IDE4IDMxMnMzOCAxNTkgMzggMjg4LTYwIDIxMi41LTYwIDMzNyA0NS4yNSAzMTcuMjUtNTYgMzk0LTM0NS0xNi41LTQ3MyAwLTI1NiAxMjYtMzY5IDEyNi0yODAuNzUtMTEzLTQ0NS0xMTNjLTEzMS42MyAwLTMxOS42MyA3My42My0zOTUgMjAtNzUuMzgtNTMuNjMtMzEuNS0xNzgtNDUtMjk1UzE4IDk0NC4xMiAxOCA4MzJjMC0xMTIuMTMgMzEuNS0yMjUgNDctMzYzUy01Ljg0IDIxOCA4OSAxMDRzMzEwLjEzIDExLjM4IDQ0NyA1YzEzNi44OC02LjM4IDI1OC4yNS04NyA0MTAtODdzMjkyLjM3IDU5IDM4OCA1OWMxNzYuNzYgMCAzOTguMTItODYgNTExLTI2WiIgZmlsbD0iIzAwMCIvPgo8L3N2Zz4K');
+              mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxNTM2IiB2aWV3Qm94PSIwIDAgMTkyMCAxNTM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Ik0xODQ1IDU1YzExMi44NyA2MCAyNi41IDIxMS41IDE4IDMxMnMzOCAxNTkgMzggMjg4LTYwIDIxMi41LTYwIDMzNyA0NS4yNSAzMTcuMjUtNTYgMzk0LTM0NS0xNi41LTQ3MyAwLTI1NiAxMjYtMzY5IDEyNi0yODAuNzUtMTEzLTQ0NS0xMTNjLTEzMS42MyAwLTMxOS42MyA3My42My0zOTUgMjAtNzUuMzgtNTMuNjMtMzEuNS0xNzgtNDUtMjk1UzE4IDk0NC4xMiAxOCA4MzJjMC0xMTIuMTMgMzEuNS0yMjUgNDctMzYzUy01Ljg0IDIxOCA4OSAxMDRzMzEwLjEzIDExLjM4IDQ0NyA1YzEzNi44OC02LjM4IDI1OC4yNS04NyA0MTAtODdzMjkyLjM3IDU5IDM4OCA1OWMxNzYuNzYgMCAzOTguMTItODYgNTExLTI2WiIgZmlsbD0iIzAwMCIvPgo8L3N2Zz4K');
+              -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+              mask-size: cover;
+              -webkit-mask-size: cover;
+              mask-position: right center;
+              -webkit-mask-position: right center;
+            " class="h-full w-full absolute right-0 top-0 filter blur-2xl"
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAADXklEQVR4ARVRNYDjRhT9f0ayJa3Zy8wYZmZmTqpU19cpk768LsxUh5l5mXnNjAJLGo0md/3jh7c9vaGidk+TsUJ776SViEqMm3uVLIBFEQzRQAjIKPmCcXAB0IQ6AYhCXxNK0qW3L5KGG0BhLVdH1Z5uJmRAdAaahhVTKOOWB7brAILkaq7jNZH5JZGyQO+FMXqd/8SsoDMPJ6Zm5FH0Y/EgTcCVSz0RojFC5m6bGhkbHuoZUMLqMuTtttstwuPBSwnIhtDpKN70ygvXjQVMHpGuvwJiWvDl174tGelzz1wxMheNLga+3MvrSqfl1M9au0Hb6SeXheXoUmTed33q1m+o0JHpWSWJ3smR+9aHJ79s//FDaU8ikcfuml1fcT797ptaPp2qsHrr12RX9ZHZcwQ4Ml8RSboUeOGX7bWVYkji2i9fVz7/+Q8B+TiQ709KvD1iqbXl0y+uv/L6aqNeMAzOxu6bnLO8wz8zh+DL9DLxgCxS3MSynkwXy7rTAk+RQJIgceP10y26US4N1PT2evrdLgy4QlFMLVOvZVmLYZ7eJ16KwXCrc1RqVFU5Fo8NRHgi5Gpj4Znnn5teP7CXN8r1yoov8v6F8ySVsm7V7gMQlOhSlWxW/dwwGe91J3XdLtY3GMMYTl136ZBXls/+StU6n0YkuVe6WvjcxXAbM9N0jPte58LaAQhnIHVz9MYn5q7pibZdwwNOmlxWA4mRHiWzcUgYeoARGkfP7PB907cH5csGhdsUKTpGbpBFkgmjbtpROraQHOhXei6N9iiulFzU2o0yrcVlkAvesgElDqgDIahO42za36Xz4rFLybVVXv3V/lk0412gOh27brm1Gk/OxwCc1FlWJ01TOIgCEW3IFP1yVL5JBaRX4IsNOOmHhSAktmDNtKVbr7gxqCmiFRwfH2rVC2e5tIu+g7YBeSY4QNQBk9PYCJmQ8rjqCFMWPZNkYgEuB/CFUgwHxJHjVC1JJLUymAZmKddHYaECnRrUJShn3e/jcg+dENf66HSwkRGnV/aOSZHa+c3zW9nUuvgx4+cvv+yJ4m62wQ4JSAooNchV4TQO4WmY0tEhGvYHxWBDlAywbnii//b7lsJwvcKHPFBYplcDOjAcIxdp5WPYa0FTBeUGuCcMYYuv/A+DT8sYIgQ3TwAAAABJRU5ErkJggg=="
+                                    alt="Cat" width="1920" height="1536">
+                                <img style="
+              -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxNTM2IiB2aWV3Qm94PSIwIDAgMTkyMCAxNTM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Ik0xODQ1IDU1YzExMi44NyA2MCAyNi41IDIxMS41IDE4IDMxMnMzOCAxNTkgMzggMjg4LTYwIDIxMi41LTYwIDMzNyA0NS4yNSAzMTcuMjUtNTYgMzk0LTM0NS0xNi41LTQ3MyAwLTI1NiAxMjYtMzY5IDEyNi0yODAuNzUtMTEzLTQ0NS0xMTNjLTEzMS42MyAwLTMxOS42MyA3My42My0zOTUgMjAtNzUuMzgtNTMuNjMtMzEuNS0xNzgtNDUtMjk1UzE4IDk0NC4xMiAxOCA4MzJjMC0xMTIuMTMgMzEuNS0yMjUgNDctMzYzUy01Ljg0IDIxOCA4OSAxMDRzMzEwLjEzIDExLjM4IDQ0NyA1YzEzNi44OC02LjM4IDI1OC4yNS04NyA0MTAtODdzMjkyLjM3IDU5IDM4OCA1OWMxNzYuNzYgMCAzOTguMTItODYgNTExLTI2WiIgZmlsbD0iIzAwMCIvPgo8L3N2Zz4K');
+              mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxNTM2IiB2aWV3Qm94PSIwIDAgMTkyMCAxNTM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxwYXRoIGQ9Ik0xODQ1IDU1YzExMi44NyA2MCAyNi41IDIxMS41IDE4IDMxMnMzOCAxNTkgMzggMjg4LTYwIDIxMi41LTYwIDMzNyA0NS4yNSAzMTcuMjUtNTYgMzk0LTM0NS0xNi41LTQ3MyAwLTI1NiAxMjYtMzY5IDEyNi0yODAuNzUtMTEzLTQ0NS0xMTNjLTEzMS42MyAwLTMxOS42MyA3My42My0zOTUgMjAtNzUuMzgtNTMuNjMtMzEuNS0xNzgtNDUtMjk1UzE4IDk0NC4xMiAxOCA4MzJjMC0xMTIuMTMgMzEuNS0yMjUgNDctMzYzUy01Ljg0IDIxOCA4OSAxMDRzMzEwLjEzIDExLjM4IDQ0NyA1YzEzNi44OC02LjM4IDI1OC4yNS04NyA0MTAtODdzMjkyLjM3IDU5IDM4OCA1OWMxNzYuNzYgMCAzOTguMTItODYgNTExLTI2WiIgZmlsbD0iIzAwMCIvPgo8L3N2Zz4K');
+              -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
+              mask-size: cover;
+              -webkit-mask-size: cover;
+              mask-position: right center;
+              -webkit-mask-position: right center;
+            " class="h-full w-full" srcset="
+            {% static 'image/cat/cat-512.webp' %} 512w,
+            {% comment %} {% static 'image/cat/cat-768.webp' %} 768w, {% endcomment %}
+            {% static 'image/cat/cat-1024.webp' %} 1024w,
+            {% static 'image/cat/cat-1440.webp' %} 1440w,
+            {% static 'image/cat/cat-1920.webp' %} 1920w,
+            " sizes="(min-width: 1024px) 50vw, 100vw" src="{% static '/image/cat/cat-1920.webp'%}" alt="Cat" width="1920"
+                                    height="1536">
+                                <img class="w-full h-full absolute right-0 top-0"
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxNTM2IiB2aWV3Qm94PSIwIDAgMTkyMCAxNTM2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxnIGZpbHRlcj0idXJsKCNhKSI+CiAgICA8cGF0aCBkPSJNMTg0NSA1NWMxMTIuODcgNjAgMjYuNSAyMTEuNSAxOCAzMTJzMzggMTU5IDM4IDI4OC02MCAyMTIuNS02MCAzMzcgNDUuMjUgMzE3LjI1LTU2IDM5NC0zNDUtMTYuNS00NzMgMC0yNTYgMTI2LTM2OSAxMjYtMjgwLjc1LTExMy00NDUtMTEzYy0xMzEuNjMgMC0zMTkuNjMgNzMuNjMtMzk1IDIwLTc1LjM4LTUzLjYzLTMxLjUtMTc4LTQ1LTI5NVMxOCA5NDQuMTIgMTggODMyYzAtMTEyLjEzIDMxLjUtMjI1IDQ3LTM2M1MtNS44NCAyMTggODkgMTA0czMxMC4xMyAxMS4zOCA0NDcgNWMxMzYuODgtNi4zOCAyNTguMjUtODcgNDEwLTg3czI5Mi4zNyA1OSAzODggNTljMTc2Ljc2IDAgMzk4LjEyLTg2IDUxMS0yNloiIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iLjAxIi8+CiAgPC9nPgogIDxwYXRoIGQ9Ik0xODQ1IDU1YzExMi44NyA2MCAyNi41IDIxMS41IDE4IDMxMnMzOCAxNTkgMzggMjg4LTYwIDIxMi41LTYwIDMzNyA0NS4yNSAzMTcuMjUtNTYgMzk0LTM0NS0xNi41LTQ3MyAwLTI1NiAxMjYtMzY5IDEyNi0yODAuNzUtMTEzLTQ0NS0xMTNjLTEzMS42MyAwLTMxOS42MyA3My42My0zOTUgMjAtNzUuMzgtNTMuNjMtMzEuNS0xNzgtNDUtMjk1UzE4IDk0NC4xMiAxOCA4MzJjMC0xMTIuMTMgMzEuNS0yMjUgNDctMzYzUy01Ljg0IDIxOCA4OSAxMDRzMzEwLjEzIDExLjM4IDQ0NyA1YzEzNi44OC02LjM4IDI1OC4yNS04NyA0MTAtODdzMjkyLjM3IDU5IDM4OCA1OWMxNzYuNzYgMCAzOTguMTItODYgNTExLTI2WiIgc3Ryb2tlPSIjMTYxNjFCIiBzdHJva2Utd2lkdGg9IjIwIi8+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSJhIiB4PSI4IiB5PSIxMiIgd2lkdGg9IjE5MDQuNTkiIGhlaWdodD0iMTUxMCIgZmlsdGVyVW5pdHM9InVzZXJTcGFjZU9uVXNlIiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgogICAgICA8ZmVGbG9vZCBmbG9vZC1vcGFjaXR5PSIwIiByZXN1bHQ9IkJhY2tncm91bmRJbWFnZUZpeCIvPgogICAgICA8ZmVCbGVuZCBpbj0iU291cmNlR3JhcGhpYyIgaW4yPSJCYWNrZ3JvdW5kSW1hZ2VGaXgiIHJlc3VsdD0ic2hhcGUiLz4KICAgICAgPGZlQ29sb3JNYXRyaXggaW49IlNvdXJjZUFscGhhIiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDEyNyAwIiByZXN1bHQ9ImhhcmRBbHBoYSIvPgogICAgICA8ZmVPZmZzZXQvPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1MCIvPgogICAgICA8ZmVDb21wb3NpdGUgaW4yPSJoYXJkQWxwaGEiIG9wZXJhdG9yPSJhcml0aG1ldGljIiBrMj0iLTEiIGszPSIxIi8+CiAgICAgIDxmZUNvbG9yTWF0cml4IHZhbHVlcz0iMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMSAwIi8+CiAgICAgIDxmZUJsZW5kIGluMj0ic2hhcGUiIHJlc3VsdD0iZWZmZWN0MV9pbm5lclNoYWRvd184ODZfNTc1OTciLz4KICAgICAgPGZlQ29sb3JNYXRyaXggaW49IlNvdXJjZUFscGhhIiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDEyNyAwIiByZXN1bHQ9ImhhcmRBbHBoYSIvPgogICAgICA8ZmVPZmZzZXQvPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSIxMjUiLz4KICAgICAgPGZlQ29tcG9zaXRlIGluMj0iaGFyZEFscGhhIiBvcGVyYXRvcj0iYXJpdGhtZXRpYyIgazI9Ii0xIiBrMz0iMSIvPgogICAgICA8ZmVDb2xvck1hdHJpeCB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDEgMCIvPgogICAgICA8ZmVCbGVuZCBpbjI9ImVmZmVjdDFfaW5uZXJTaGFkb3dfODg2XzU3NTk3IiByZXN1bHQ9ImVmZmVjdDJfaW5uZXJTaGFkb3dfODg2XzU3NTk3Ii8+CiAgICA8L2ZpbHRlcj4KICA8L2RlZnM+Cjwvc3ZnPgo="
+                                    alt="Cat Outline" width="1920" height="1920">
+                            </div>
+                        </div>
+                        <div
+                            class="absolute bottom-[15%] right-0 flex w-full justify-end px-3 py-2 md:bottom-[20%] md:pl-8 md:pr-12 lg:bottom-[20%] lg:pl-4 lg:pr-1">
+                            <p
+                                class="rounded-lg bg-c-bg-secondary px-4 py-3 text-xs font-medium shadow-xl shadow-c-shadow/[var(--o-shadow-stronger)] ring-2 ring-c-bg-tertiary md:rounded-xl md:text-base lg:px-5 lg:text-lg">
+                                majestic cat, psychedelic, violet tones, fantasy landscape</p>
+                        </div>
+                    </div>
+                    <div
+                        class="order-1 flex flex-col items-center px-6 pb-8 pt-6 lg:order-2 lg:w-2/5 lg:items-start lg:pb-20 lg:pl-10 lg:pr-12 lg:pt-12 xl:w-1/2 xl:pl-16">
+                        <div class="flex flex-col items-center lg:items-start">
+                            <h2
+                                class="max-w-[19rem] flex-1 text-center text-3xl font-semibold leading-tight md:max-w-[22rem] md:text-4xl lg:max-w-[28rem] lg:text-left lg:text-5xl lg:leading-tight">
+                                Describe anything.</h2>
+                            <p
+                                class="mt-2 max-w-[22rem] text-center leading-relaxed text-c-on-bg/75 md:text-lg lg:max-w-[28rem] lg:text-left lg:text-xl">
+                                Anything you like, in thousands of different styles. It’ll be generated by AI in
+                                seconds.</p>
+                            <a href="myapp/generate?p=majestic%20cat%2C%20psychedelic%2C%20violet%20tones%2C%20fantasy%20landscape&amp;smo=true&amp;mi=22b0857d-7edc-4d00-9cd9-45aa509db093"
+                                data-sveltekit-preload-data="hover"
+                                class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold p-0 text-base rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary  mt-6 hidden w-full max-w-[15rem] px-6 py-4 md:block md:px-8  svelte-1acvjgn">
+                                <div style="width: NaNpx; height: NaNpx;"
+                                    class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                                    <div
+                                        class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-hover:translate-x-0">
+                                    </div>
+                                </div>
+                                <div class="relative flex items-center justify-center gap-3">Try It Now </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="init-image"
+                class="relative z-0 flex w-full flex-col justify-center overflow-hidden pb-4 pt-20 lg:flex-row">
+                <div class="flex flex-col items-center px-5 lg:hidden">
+                    <h2
+                        class="flex-1 text-center text-3xl font-semibold leading-tight md:text-4xl lg:text-5xl lg:leading-tight">
+                        Or start with an image.</h2>
+                    <p
+                        class="mt-2 max-w-[24rem] text-center leading-relaxed text-c-on-bg/75 md:max-w-[26rem] md:text-lg lg:max-w-[35rem] lg:text-xl">
+                        Give an input image, generate new art based on it.</p>
+                    <a href="myapp/generate?smo=true" data-sveltekit-preload-data="hover"
+                        class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold p-0 text-base rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary  mt-6 w-full max-w-[15rem] px-6 py-4 md:px-8  svelte-1acvjgn">
+                        <div style="width: NaNpx; height: NaNpx;"
+                            class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                            <div
+                                class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-hover:translate-x-0">
+                            </div>
+                        </div>
+                        <div class="relative flex items-center justify-center gap-3">Try It Now </div>
+                    </a>
+                </div>
+                <div
+                    class="relative mt-8 flex w-full max-w-[120rem] items-center justify-center gap-4 md:gap-8 lg:h-[calc(100svh-env(safe-area-inset-bottom)-10rem)] lg:min-h-[40rem] lg:gap-0">
+                    <div class="relative -ml-[15%] aspect-[2/3] h-full flex-1 lg:ml-0 lg:flex-none">
+                        <div class="absolute right-0 top-0 h-full w-full" style="
+					-webkit-mask-image: url({% static 'image/dragon/dragon-mask.svg'%});
+					mask-image: url({% static 'image/dragon/dragon-mask.svg'%});
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					mask-size: cover;
+					-webkit-mask-size: cover;
+					mask-position: right center;
+					-webkit-mask-position: right center;
+				">
+                <img style="" class=" filter transition duration-300 ease-in blur-none" src="{% static 'image/dragon/dragon-1920.webp' %}" alt="Dragon" width="1280" height="1920" srcset="
+                
+                {% static 'image/dragon/dragon-512.webp' %} 512w,
+                {% static 'image/dragon/dragon-768.webp' %} 768w,
+                {% static 'image/dragon/dragon-1024.webp' %} 1024w,
+                {% static 'image/dragon/dragon-1440.webp' %} 1440w,
+                {% static 'image/dragon/dragon-1920.webp' %} 1920w,
+            " sizes="(min-width: 1024px) 40vw, 50vw">
+                        <img style="" class=" filter transition duration-300 ease-in blur-xl"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAIAAAB8wupbAAADnUlEQVR4ARXP1WLrRhAG4JnZXVmSITGHc6jMzMzM+Ih9hzL3ptxgG2ajbNFidf67hYEPLzVecc4CoEBBzDgHCMyBKW5cEUDjrHLWWq1sYiDnggix+AFoObMVwNRZx6miMbZgEYk5AmdyZ+B6it/A0BEBOsykSZlf9XyfpCjbduCF5BABnDOIROQhILHrBUBWBDjTYfPZRE5JgRDMr9Rmmxy5sUYQL5HgVAJATgi+V23TjTujbQmR57zDwabzs3GCViWd0rxTUAgUaIVI6PG63/X17GH/cKjOQRgS0pN+nA0FlNH6hLMNG+Sin5m00Gsq8ZZYqgStOM+0XBjhnstEw1tRpOvldJglJvOWajf1aSeic3AggLOr/tO3Xrnr/Q/e8kP+y9r3ndJSDCPiyGzAbLk7s7pSuVKCkoSUFR7QtNhZqc6EwI2QYeDm51dbptQ7Sv5IUMUutV60PVk/6B0X9OIPJ07LS4vluh8n6cbOVhuueHnj6tIdnqk+1Hz29Vs/HUXRV+efJbPDW2uPUR4ap/jmxk7nPL81uDLORhLGo0Pi18RDNz6nena5dnPr8nLncPHBhadcxnKVS8rYldojTa+7vrl1uH+a8EFiIjatlefNKOpNp/Lmzm2X/dsHvf5vgy8iOiEktli5p8brm4ebng2bpU7f7V/YAyTIbDocx+2wnejpWb5neVp81k7SbPEp7vWTM9/zDTPSSxmjLDZe4NlMb52vG+1iHUkq7hHAUQGfxGnDn1sIr8Y2aurLj8D7RqtURVCR6AMxB0zHZprZqTaKNf2b/x2vt4J5poLcxAPcD6niB6ULuy9MkEZqQoOOtzg1FxMzkFqR0ppr7yBZW8u/cwqAmU36iZKgJhrg5xzYsrhRQqZQOQeESLnNG3xhwd58SusnuFmV8xPX27O/e3ntUG7o6rQCtaNoCwl8EXLi5Je4R14IDUf5Kf8783p13uzjwdCecof70Vq5PHPvyqPDwVi7DBGJAc9drtjUgragpJgQiLq6Sipo8ZWe3j9VO4/e8tTzd7yCadmCYyvlR9JYR3jap50q6waskuW2I6+GbiYT05guWBquBjcWHpWbHGK2WnswTnIDKuUj31U1aGVVwy5yED3aByZjjMqukU3zSotFWUQytSN2VMKwgk0N0ilyqMfsdMKGuR1bp0/S3f/itRtvXB5OhtNJysdZZEUaqxHYApkzIossYmeeLQMiOk7AL/QJle3lK/OW9P9R0CGEeobYrgAAAABJRU5ErkJggg=="
+                            alt="Dragon" width="1280" height="1920"> 
+
+                        </div>
+                        <img class="w-full h-full absolute right-0 top-0" src="{% static 'image/dragon/dragon-outline-dark.svg' %}" alt="Dragon Outline"  width="1280" height="1280">
+                        {% comment %} <img class="w-full h-full absolute right-0 top-0" src="/image/dragon/dragon-outline-dark.svg"
+                            alt="Dragon Outline" width="1280" height="1280"> {% endcomment %}
+                    </div>
+                    <div
+                        class="absolute bottom-[20%] z-10 flex flex-col items-center px-6 pb-8 pt-6 lg:relative lg:bottom-0 lg:min-w-[35%] lg:pb-20 lg:pt-12 xl:min-w-[44%]">
+                        <div class="hidden flex-col items-center lg:flex">
+                            <h2
+                                class="max-w-[19rem] flex-1 text-center text-3xl font-semibold leading-tight md:max-w-[22rem] md:text-4xl lg:max-w-[36rem] lg:text-5xl lg:leading-tight">
+                                Or start with an image.</h2>
+                            <p
+                                class="mt-2 max-w-[22rem] text-center leading-relaxed text-c-on-bg/75 md:text-lg lg:max-w-[36rem] lg:text-xl">
+                                Give an input image, generate new art based on it.</p>
+                            <a href="myapp/generate?smo=true" data-sveltekit-preload-data="hover"
+                                class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold p-0 text-base rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary  mt-6 w-full max-w-[15rem] px-6 py-4 md:px-8  svelte-1acvjgn">
+                                <div style="width: NaNpx; height: NaNpx;"
+                                    class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                                    <div
+                                        class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-hover:translate-x-0">
+                                    </div>
+                                </div>
+                                <div class="relative flex items-center justify-center gap-3">Try It Now </div>
+                            </a>
+                        </div>
+                        <div class="relative flex w-full items-center justify-center lg:mt-20">
+                            <div style="background-image: url({% static 'image/arrow/arrow-middle-dark.png'%}); background-size: auto 100%; background-repeat: repeat-x;"
+                                class="absolute left-1/2 top-1/2 h-4 w-[calc(100%+20rem)] max-w-[calc(100vw-4rem)] -translate-x-1/2 -translate-y-1/2 transform lg:w-[calc(100%+12rem)]">
+                                <img class="absolute -left-4 top-0 h-full" alt="Arrow Start"
+                                    src="{% static 'image/arrow/arrow-start-dark.png' %}">
+                                <img class="absolute -bottom-5 -right-9 h-14 w-14" alt="Arrow End"
+                                    src="{% static 'image/arrow/arrow-end-dark.png' %}">
+
+                            </div>
+                            <p
+                                class="relative rounded-xl bg-c-bg-secondary px-4 py-2 text-lg font-medium shadow-xl shadow-c-shadow/[var(--o-shadow-stronger)] ring-2 ring-c-bg-tertiary md:px-6 md:py-3 md:text-2xl lg:text-3xl">
+                                robot alien</p>
+                        </div>
+                    </div>
+                    <div class="relative -mr-[15%] aspect-[2/3] h-full flex-1 lg:mr-0 lg:flex-none">
+                        <div class="absolute right-0 top-0 h-full w-full" style="
+					-webkit-mask-image: url({% static 'image/dragon-alien/dragon-alien-mask.svg'%});
+					mask-image: url({% static 'image/dragon-alien/dragon-alien-mask.svg'%});
+					-webkit-mask-repeat: no-repeat;
+					mask-repeat: no-repeat;
+					mask-size: cover;
+					-webkit-mask-size: cover;
+					mask-position: right center;
+					-webkit-mask-position: right center;
+				">
+                <img style="" class=" filter transition duration-300 ease-in blur-none" src="{% static 'image/dragon-alien/dragon-alien-1920.webp' %}" alt="Dragon Alien" width="1280" height="1920" srcset="
+                {% static 'image/dragon-alien/dragon-alien-512.webp' %} 512w,
+                {% static 'image/dragon-alien/dragon-alien-768.webp' %} 768w,
+                {% static 'image/dragon-alien/dragon-alien-1024.webp' %} 1024w,
+                {% static 'image/dragon-alien/dragon-alien-1440.webp' %} 1440w,
+                {% static 'image/dragon-alien/dragon-alien-1920.webp' %} 1920w,
+        " sizes="(min-width: 1024px) 40vw, 50vw">
+                            <img style="" class=" filter transition duration-300 ease-in blur-xl"
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAIAAAB8wupbAAAEE0lEQVR4AQ3Pg5vsyB4A0F9KySSdZsaN4Xtr27b5Ye0Pa9u2bdu2dW2O3UY6rKq95z84SifZloKqAJIobPj1EPiAtVXC6HBD1yBmIyyP15dwybFCHMdVBCIYMFYYQy1lL98ey+yw8cH1enO0vCgb2cqI6AvWflSoD4GCu/VNdRx3ha30kX0wUl2/6YK3WWZbpMKKofkdkQFBndnG+qpXjNB4CzKZjCIFubKhDNJDvMDtjPfssNm+juPUGlXJwtHS4uWF73iAtmk7JIHaKo1K0Z8BEAI4CYOgM5U9+YjLutp71g8vL1fz+fLIu0s/3iy1h4pNMxLXkAZ2SIF44FFFw/0tu1BMa/Xi0PDqL+a9+P2yV9toru7awld8L7CDmpVqU4kmQ6EIQAgTnZgi4FNjI5oeCXzOkPnJyMvtkG6Sgs1rht/OdDUZjfuBixEJRUgEF4ZhZvrT/Vtt3LWm/5cfvunv3CpE9tLJ32LE8kRTKrytq7NSrQgA5AYISTCienawb92S9SsXLdl0y43vfuLBnbfaX4M2BAwDjE2vVVQl1W4xSiUIhBGNRM2u/3fOVcZTGeOy265etPTfz396K0biUZqMQZtd9ABx04xStiGLCRfhhlxHT8fF916sUX16fOr6W85rhf4OM90IikRXm25zeGgEc0YY0iMGopgxygIvCL0gYUZeevmxarh2896dW4hZ9fOEUjewf/n1p/Gx8U5rk1S0mwgpheRu047oxh/fz/vsl+db1Y0xojP2MFIQ5XqX2dttDYTMW5ufX6xMkpD7QgrEoLZevv/K2wD2QNu2GOO6X0BYUaWxSfeOw+78fyc+qNqTGW0HBFJBBFRIlMedeWu+BQBDjTaDWtbaxFJ7Blq3GG4sdrzmzrkTGOrsTgwgkEBbmFv0V69akoehZEs/FWa+MuXKRi6+sU0LS2d/NKS1amhxRKRSZichFKtYW/jX/J9//5YpWpvey2Sk5q9SJDBV/Xb0qUbQWF74CSTdafMDs20DaEO6XrGNpO6xSgJ1W0ZmtLa84s+04dzq8l9ld4gqzOE1H+qu73AZIgGQ27Tv+KsOPeXisyhPWCxtRWM8DBpBNe9OMqU9lB4oCpcyN5DVNBXFLWunY7Zv/T8kEqkGNNYU/pUQIM5K/mSdz4XSaY2mo3oSFACHOo5NttlzWxKTKkAzbNQhP1WtuTZHSFb5dCAcAbVjjz9LCv74yzequh7TTLTFPpuqOivXYHrFLIdZAX5KTUtF2KIUgtCwte+xB+lGPCV7R/MrJeUEYWmS1FOXvv3iK09HkQVYqlSNiY5qOBPCzIknXLvpjn0XHHEmkcY/f//RLDWJl2/+uujnv96bRyl3ubNZfF+VtzCkcQgUQFOTw+899BlIxFSe4H1RtfM/4e8VW66QpJgAAAAASUVORK5CYII="
+                                alt="Dragon Alien" width="1280" height="1920">
+                        </div>
+                        <img class="w-full h-full absolute right-0 top-0"
+                            src={% static 'image/dragon-alien/dragon-alien-outline-dark.svg'%} alt="Dragon Alien Outline"
+                            width="1280" height="1280">
+                    </div>
+                </div>
+            </section>
+            <section id="start-creating" class="flex w-full justify-center pb-8 pt-16 md:pb-16 lg:pt-8 xl:pt-4">
+                <div class="flex w-full max-w-7xl flex-col items-center px-3 md:px-8">
+                    <div class="flex flex-col items-center px-3 md:px-6">
+                        <h2
+                            class="max-w-[19rem] flex-1 text-center text-3xl font-semibold leading-tight md:max-w-[22rem] md:text-4xl lg:max-w-[36rem] lg:text-5xl lg:leading-tight">
+                            Start creating now!</h2>
+                        <p
+                            class="mt-2 max-w-[22rem] text-center leading-relaxed text-c-on-bg/75 md:text-lg lg:max-w-[36rem] lg:text-xl">
+                            It’s free to try :) Give it a go, we think you’ll like it. Thousands of our users do.</p>
+                        <a href="my/generate?smo=true" data-sveltekit-preload-data="hover"
+                            class="group relative z-0 flex touch-manipulation items-center justify-center gap-2 overflow-hidden text-center font-bold p-0 text-base rounded-xl shadow-lg shadow-c-shadow/[var(--o-shadow-strong)] text-c-on-primary bg-c-primary  mt-6 w-full max-w-[16rem] px-6 py-4 md:px-8  svelte-1acvjgn">
+                            <div style="width: NaNpx; height: NaNpx;"
+                                class="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform items-center justify-center not-touch:flex">
+                                <div
+                                    class="absolute left-0 h-full w-full -translate-x-full transform rounded-full transition bg-c-secondary not-touch:group-hover:translate-x-0">
+                                </div>
+                            </div>
+                            <div class="relative flex items-center justify-center gap-3">Start Creating </div>
+                        </a>
+                    </div>
+                    <div
+                        class="relative z-0 mt-8 w-full overflow-hidden rounded-lg shadow-2xl shadow-c-shadow/[var(--o-shadow-strong)] ring-2 ring-c-bg-secondary md:mt-10 md:rounded-xl lg:rounded-2xl">
+                        {% comment %} <img style=""
+                            class="h-auto w-full scale-100.2 transform filter transition duration-300 ease-in blur-xl"
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAPCAYAAAD+pA/bAAACo0lEQVR4AZyTNYArNxRFjzTgsdcUL+9nZuZf5XdhThts0xfpi3DK9G2YmZmZeZnZ7JGUSImXg9cekvTuu4/Els17B8enezOiFlKsK5KRTyoVEscKz/PI5wtUKmUajTpNCCFQyu3/vt7AGI3BoGJFW1sH6UyGcqmE53vz4tjma42Sc+jOXzj/1C4+/XSczz7uJ5ONaMKSGWMQYsGF+1a6jlIxN194L/s2b+GeB25lcOpL0qkCxeI8QgrEAf/6ubbdWzJtZ59h/ZHTvPvKr3zy4PPk2tuR0ildUL0S2mjAsLXrMC2JiB+Hv0ZRwS6Xy2WEkPN+48Akwb4NlPvWc9/Yr4ihAZLSERIEIZ6nacKqXu5MuDR91fsGxdl5Wts6yWcLTE1P2jPukju3FjnZch71n6/k0toP7K18TclLu81/hnH5z6RayeXaEFhlEEXRghh5qprmVGjwjhXpzsUkDCgk/xVWkCUtlYpIKfF93wmQP8RdvDYQMzs1woazt5DffA5dn/q/DmzNFjoMBDK/pYO2TUl6PnkfrZOoRAQm5r/CklvlNj32GcexW/P754dpFH9gZuZpHnvjMGq2Dd95N+7AYmEdzRLCBeJl63YuLLTW7vLNZ1/zU8rjkyO72BmdJDvzCRADYqETVsOuL6YGxIKYPzrPI4pSbkD9s4f2ErSn+er7Tznw2u38NDuCyeT5j7BpsQ4WUmMvF8FHqkhn7JP4eYr2Iy30/iLQPwlI8r8KbUktarWqe5d9vb08/eLrDA+PsPvcfgo7N6ArVf4PrGpLXC6X7LtLlZ9JhZlk1EpHdw+ffTDKwPfjyDD4M/8SIcyaShff5dJvS2rJm22bEYW29YNhIswU0gHTo2W0ial6ikB61njNzlled0vkOobfBjIYDXwGAN0tUNLsv4fMAAAAAElFTkSuQmCC"
+                            alt="App" width="1920" height="1200"> {% endcomment %}
+                        <img style="" class="h-auto w-full scale-100.2 transform filter transition duration-300 ease-in blur-none" src="/landing/app-dark-1920.webp" alt="App" width="1920" height="1200" srcset="
+                        
+                        {% static 'image/app/app-dark-512.webp'%} 512w,
+                        {% static 'image/app/app-dark-768.webp'%} 768w,
+                        {% static 'image/app/app-dark-1024.webp'%} 1024w,
+                        {% static 'image/app/app-dark-1440.webp'%} 1440w,
+                        {% static 'image/app/app-dark-1920.webp'%} 1920w
+      " sizes="(min-width: 1280px) 1280px, 100vw">
+                        
+                    </div>
+                </div>
+            </section>
+        </main>
+        <div
+            class="flex w-full flex-wrap items-center justify-center gap-1.5 md:gap-2.5 px-6 pt-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
+            <div class=" flex flex-wrap justify-center ">
+                <a aria-describedby="vgZ54GOKRG" id="8a-7FrO5zm" data-state="closed" data-melt-tooltip-trigger=""
+                    href="/discord" target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="Discord">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M18.942 5.297A16.29 16.29 0 0 0 14.816 4a12.09 12.09 0 0 0-.529 1.097 15.153 15.153 0 0 0-4.573 0A11.724 11.724 0 0 0 9.18 4 16.235 16.235 0 0 0 5.05 5.3C2.44 9.246 1.731 13.094 2.085 16.887a16.5 16.5 0 0 0 5.06 2.593c.41-.564.773-1.16 1.084-1.785a10.66 10.66 0 0 1-1.706-.83c.142-.106.282-.217.418-.331 3.29 1.539 6.866 1.539 10.118 0 .136.114.276.224.418.33-.544.329-1.116.607-1.71.833.314.627.675 1.224 1.084 1.785a16.461 16.461 0 0 0 5.064-2.595c.415-4.397-.71-8.21-2.973-11.59ZM8.678 14.554c-.988 0-1.798-.922-1.798-2.045 0-1.123.792-2.047 1.798-2.047 1.005 0 1.815.922 1.798 2.047.001 1.123-.793 2.045-1.798 2.045Zm6.644 0c-.988 0-1.798-.922-1.798-2.045 0-1.123.793-2.047 1.798-2.047 1.006 0 1.816.922 1.798 2.047 0 1.123-.793 2.045-1.798 2.045Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a aria-describedby="f6FCTnt8_u" id="ZVwaCg6PTj" data-state="closed" data-melt-tooltip-trigger=""
+                    href="/x" target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="X">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M17.18 3.86h2.76l-6.03 6.9L21 20.14h-5.55l-4.35-5.7-4.98 5.7H3.36l6.45-7.38L3 3.86h5.7l3.93 5.2 4.55-5.2Zm-.97 14.62h1.53L7.86 5.43H6.22l9.99 13.05Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a aria-describedby="fVXq7zCtNj" id="RZOtsQzGkI" data-state="closed" data-melt-tooltip-trigger=""
+                    href="/instagram" target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="Instagram">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.997 6.869a5.124 5.124 0 0 0-5.13 5.13c0 2.84 2.29 5.132 5.13 5.132s5.131-2.292 5.131-5.131c0-2.84-2.291-5.131-5.13-5.131Zm0 8.466A3.342 3.342 0 0 1 8.663 12a3.342 3.342 0 0 1 3.334-3.335A3.342 3.342 0 0 1 15.332 12a3.342 3.342 0 0 1-3.335 3.335Zm5.341-9.872c-.663 0-1.198.535-1.198 1.198 0 .663.535 1.199 1.198 1.199a1.195 1.195 0 0 0 1.108-1.657 1.198 1.198 0 0 0-1.108-.74ZM21.998 12c0-1.381.013-2.75-.064-4.128-.078-1.601-.443-3.022-1.614-4.193-1.173-1.173-2.591-1.536-4.192-1.613C14.747 1.988 13.378 2 12 2c-1.381 0-2.75-.013-4.128.065-1.601.077-3.022.443-4.193 1.613-1.173 1.174-1.536 2.592-1.613 4.193C1.988 9.253 2 10.622 2 12c0 1.378-.013 2.75.065 4.128.077 1.6.443 3.021 1.613 4.192 1.174 1.174 2.592 1.536 4.193 1.614 1.381.077 2.75.065 4.128.065 1.38 0 2.75.012 4.128-.065 1.6-.078 3.021-.443 4.192-1.614 1.174-1.173 1.536-2.591 1.614-4.192.08-1.379.065-2.747.065-4.128Zm-2.2 5.899a3.177 3.177 0 0 1-.756 1.145c-.353.353-.69.573-1.146.756-1.316.523-4.44.405-5.899.405-1.458 0-4.585.118-5.901-.403a3.178 3.178 0 0 1-1.146-.755 3.2 3.2 0 0 1-.755-1.146c-.52-1.318-.403-4.443-.403-5.901 0-1.459-.118-4.586.403-5.902.182-.455.402-.795.755-1.145s.69-.573 1.146-.756c1.316-.52 4.443-.403 5.901-.403 1.459 0 4.586-.117 5.902.403.455.183.795.403 1.145.756a3.2 3.2 0 0 1 .756 1.145c.52 1.316.403 4.443.403 5.902 0 1.458.117 4.583-.406 5.899Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a aria-describedby="D65MpSJCbB" id="hBHVzGW-3_" data-state="closed" data-melt-tooltip-trigger=""
+                    target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="Email">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 11.858 2.403 7.061A2.4 2.4 0 0 1 4.8 4.8h14.4a2.4 2.4 0 0 1 2.396 2.26L12 11.859Zm0 2.684 9.6-4.8V16.8a2.4 2.4 0 0 1-2.4 2.4H4.8a2.4 2.4 0 0 1-2.4-2.4V9.742l9.6 4.8Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a aria-describedby="4m5igfCee_" id="DkkKPLvLCC" data-state="closed" data-melt-tooltip-trigger=""
+                    href="/producthunt" target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="Product Hunt">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Zm-1.5-10h2.833a1.5 1.5 0 1 0 0-3H10.5v3Zm-2-5h4.833a3.5 3.5 0 0 1 0 7H10.5v3h-2V7Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a aria-describedby="bQccfsRaDd" id="JOFjGrP9N6" data-state="closed" data-melt-tooltip-trigger=""
+                    href="/github" target="_blank" data-sveltekit-preload-data="off"
+                    class="group/iconbutton touch-manipulation rounded-full " aria-label="GitHub">
+                    <div class="relative z-0 overflow-hidden rounded-full p-2">
+                        <div
+                            class="h-full w-full transform transition ease-out bg-c-primary/25 absolute left-0 top-0 rounded-full -translate-x-full not-touch:group-hover/iconbutton:translate-x-0">
+                        </div>
+                        <div class="relative">
+                            <div class="transition ">
+                                <svg class="h-8 w-8 transition text-c-on-bg/60 not-touch:group-hover/iconbutton:text-c-primary"
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12.001 2C6.475 1.998 2 6.593 2 12.264c0 4.485 2.8 8.297 6.699 9.697.525.135.444-.248.444-.51v-1.778c-3.032.365-3.155-1.696-3.358-2.04-.411-.721-1.383-.905-1.093-1.25.69-.364 1.395.093 2.21 1.33.59.897 1.74.746 2.324.596.127-.539.4-1.021.775-1.395-3.141-.578-4.45-2.548-4.45-4.889 0-1.136.364-2.18 1.079-3.022-.456-1.389.042-2.578.11-2.755 1.297-.119 2.647.955 2.752 1.04.737-.204 1.58-.312 2.522-.312.948 0 1.793.112 2.537.319.252-.197 1.503-1.12 2.71-1.008.065.177.552 1.338.123 2.709.724.844 1.092 1.898 1.092 3.036 0 2.346-1.318 4.317-4.468 4.887.27.272.484.597.63.956.146.358.221.743.22 1.132v2.582c.019.207 0 .411.336.411C19.151 20.63 22 16.79 22 12.266 22 6.593 17.522 2 12.001 2Z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="flex w-full flex-col flex-wrap items-start md:w-auto">
+                <div class="flex w-full flex-row items-center justify-center gap-1.5 md:w-auto">
+                    <a href="/terms" data-sveltekit-preload-data="hover"
+                        class="rounded-lg py-0.5 text-center text-xs font-medium leading-relaxed text-c-on-bg/60 hover:text-c-primary hover:underline md:my-auto">Terms
+                        of Service</a>
+                    <span class="text-xs text-c-on-bg/25" data-svelte-h="svelte-8ptlov">•</span>
+                    <a href="/privacy" data-sveltekit-preload-data="hover"
+                        class="rounded-lg py-0.5 text-center text-xs font-medium leading-relaxed text-c-on-bg/60 transition hover:text-c-primary hover:underline md:my-auto">Privacy
+                        Policy</a>
+                </div>
+                <div class="mt-0.5 flex w-full items-center justify-center md:mt-0 md:w-auto">
+                    <p class="rounded-lg text-center text-xs font-medium leading-relaxed text-c-on-bg/60">© 2023
+                        Stablecog, Inc.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {
+            
+
+            const element = document.currentScript.parentElement;
+
+            const data = [{
+                "type": "data",
+                "data": {
+                    locale: "en",
+                    session: null,
+                    theme: null,
+                    userSummary: void 0,
+                    isLeftSidebarHidden: false,
+                    globalSeed: 764036905074
+                },
+                "uses": {}
+            }, null, null];
+
+            Promise.all([import("{% static 'js/entry/start.24hkOUwp.js' %}")
+                ]).then(([kit, app]) => {
+                kit.start(app, element, {
+                    node_ids: [0, 6, 55],
+                    data,
+                    form: null,
+                    error: null
+                });
+            }
+            );
+        }
+    </script>
+</body>
+
+</html>
