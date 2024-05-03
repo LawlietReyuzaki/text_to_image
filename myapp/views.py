@@ -28,7 +28,7 @@ def image_generator_function(user_input , negative_prompt):
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "authorization": "C5FFQ4REHZ3K0ZWLGDP4CIALI0Z3A0WSPUX5UVZW"
+            "authorization": "U1JT8CJAZ4PU315W7PZUFA550V0VIWNY8888USN2"
         }
 
         response = requests.post(url, json=payload, headers=headers)
