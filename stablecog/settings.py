@@ -74,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'stablecog.wsgi.application'
+WSGI_APPLICATION = 'stablecog.wsgi.app'
 
 
 # Database
