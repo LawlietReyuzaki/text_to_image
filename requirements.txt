@@ -1,7 +1,2 @@
 django
-matplotlib
-pathlib
-PIL
-json
-io
-requests
+
