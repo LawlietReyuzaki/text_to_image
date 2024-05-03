@@ -23,3 +23,6 @@ urlpatterns = [
     path('myapp/', include("myapp.urls")),
     path('' , include("myapp.urls"))
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
